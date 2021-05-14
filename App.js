@@ -32,11 +32,14 @@ class GameSquare extends Component {
     super(props);
     this.state = {
       color : this.props.color,
+      imgComp : <View></View>,
     };
     if(this.state.color == "black"){
       this.state.color = "gray";
     }
-
+    if(this.props.curPiece != 'none'){
+      this.state.imgComp = <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
+    }
   }
 
   render(){
@@ -44,7 +47,7 @@ class GameSquare extends Component {
     return(
 
       <View style={[styles.gameSquare, {backgroundColor: this.state.color}]}>
-
+        {this.state.imgComp}
       </View>
 
     );
@@ -88,9 +91,13 @@ class GameBoard extends Component {
     }
     // this is filling the game board with the initial values
     for(var i = 0; i < 8; i++){
-      this.state.whitePieces[i] = new Pawn('white');
+      
+      var tempPawn = new Pawn('white');
+      this.state.whitePieces[i] = tempPawn;
+      this.state.grid[6][i].curPiece = tempPawn;
+      console.log(tempPawn.img)
     }
-    
+
 
   }
   
@@ -155,5 +162,9 @@ const styles = StyleSheet.create({
     width: deviceWidth * 1/9,
     height: deviceWidth * 1/9,
     backgroundColor: 'yellow'
-  }
+  },
+  imageSquare: {
+    width: deviceWidth * 1/9,
+    height: deviceWidth * 1/9,
+  },
 });
