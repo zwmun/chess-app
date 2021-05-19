@@ -13,10 +13,10 @@ class Pawn {
     this.img;
     this.curPosition;
     if(this.color == "white"){
-      this.img = "./photos/wPawn.png"
+      this.img = require("./photos/wPawn.png")
     }
     else{
-      this.img = "./photos/bPawn.png"
+      this.img = require("./photos/bPawn.png")
     }
   }
   move = () => {
@@ -92,10 +92,15 @@ class GameBoard extends Component {
     // this is filling the game board with the initial values
     for(var i = 0; i < 8; i++){
       
-      var tempPawn = new Pawn('white');
-      this.state.whitePieces[i] = tempPawn;
-      this.state.grid[6][i].curPiece = tempPawn;
-      console.log(tempPawn.img)
+      var whitePawn = new Pawn('white');
+      var blackPawn = new Pawn('black');
+
+      this.state.whitePieces.push(whitePawn);
+      this.state.blackPieces.push(blackPawn);
+
+      this.state.grid[6][i].curPiece = whitePawn;
+      this.state.grid[1][i].curPiece = blackPawn;
+
     }
 
 
@@ -157,6 +162,7 @@ const styles = StyleSheet.create({
     height: deviceWidth * 8/9, /* NOTE: this currently won't work with the device turned sideways, add a way to choose the shortest side later */
     backgroundColor: 'orange',
     flexWrap: 'wrap',
+    flexDirection: 'row',
   },
   gameSquare: {
     width: deviceWidth * 1/9,
