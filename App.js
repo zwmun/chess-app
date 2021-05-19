@@ -26,6 +26,106 @@ class Pawn {
   }
 }
 
+class Knight {
+  constructor(color){
+    this.color = color;
+    this.inPlay = true;
+    this.img;
+    this.curPosition;
+    if(this.color == "white"){
+      this.img = require("./photos/wKnight.png")
+    }
+    else{
+      this.img = require("./photos/bKnight.png")
+    }
+  }
+  move = () => {
+    
+
+
+  }
+}
+
+class Bishop {
+  constructor(color){
+    this.color = color;
+    this.inPlay = true;
+    this.img;
+    this.curPosition;
+    if(this.color == "white"){
+      this.img = require("./photos/wBishop.png")
+    }
+    else{
+      this.img = require("./photos/bBishop.png")
+    }
+  }
+  move = () => {
+    
+
+
+  }
+}
+
+class Rook {
+  constructor(color){
+    this.color = color;
+    this.inPlay = true;
+    this.img;
+    this.curPosition;
+    if(this.color == "white"){
+      this.img = require("./photos/wRook.png")
+    }
+    else{
+      this.img = require("./photos/bRook.png")
+    }
+  }
+  move = () => {
+    
+
+
+  }
+}
+
+class Queen {
+  constructor(color){
+    this.color = color;
+    this.inPlay = true;
+    this.img;
+    this.curPosition;
+    if(this.color == "white"){
+      this.img = require("./photos/wQueen.png")
+    }
+    else{
+      this.img = require("./photos/bQueen.png")
+    }
+  }
+  move = () => {
+    
+
+
+  }
+}
+
+class King {
+  constructor(color){
+    this.color = color;
+    this.inPlay = true;
+    this.img;
+    this.curPosition;
+    if(this.color == "white"){
+      this.img = require("./photos/wKing.png")
+    }
+    else{
+      this.img = require("./photos/bKing.png")
+    }
+  }
+  move = () => {
+    
+
+
+  }
+}
+
 class GameSquare extends Component {
 
   constructor(props){
@@ -89,6 +189,29 @@ class GameBoard extends Component {
       }
 
     }
+    
+    this.state.whitePieces = [
+      new Rook('white'),
+      new Knight('white'),
+      new Bishop('white'),
+      new Queen('white'),
+      new King('white'),
+      new Bishop('white'),
+      new Knight('white'),
+      new Rook('white'),
+    ];
+
+    this.state.blackPieces = [
+      new Rook('black'),
+      new Knight('black'),
+      new Bishop('black'),
+      new Queen('black'),
+      new King('black'),
+      new Bishop('black'),
+      new Knight('black'),
+      new Rook('black'),
+    ];
+
     // this is filling the game board with the initial values
     for(var i = 0; i < 8; i++){
       
@@ -98,7 +221,10 @@ class GameBoard extends Component {
       this.state.whitePieces.push(whitePawn);
       this.state.blackPieces.push(blackPawn);
 
+      this.state.grid[7][i].curPiece = this.state.whitePieces[i];
       this.state.grid[6][i].curPiece = whitePawn;
+
+      this.state.grid[0][i].curPiece = this.state.blackPieces[i];
       this.state.grid[1][i].curPiece = blackPawn;
 
     }
