@@ -21,8 +21,6 @@ class Pawn {
     }
   }
   move = (board) => {
-    
-
 
   }
 }
@@ -135,18 +133,13 @@ class GameSquare extends Component {
     this.state = {
       color : this.props.color,
       imgComp : <View></View>,
-      posColor : '#0000000',
-      isPos : this.props.isPos,
     };
-    if(this.state.isPos){
-      this.state.posColor = "#00FFFFA0";
-    }
 
     if(this.state.color == "black"){
       this.state.color = "gray";
     }
     if(this.props.curPiece != 'none'){
-      this.state.imgComp = <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
+      this.state.imgComp = <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />;
     };
   }
 
@@ -155,9 +148,7 @@ class GameSquare extends Component {
     return(
 
       <View style={[styles.gameSquare, {backgroundColor: this.state.color}]}>
-        <View style={[styles.gameSquare, {backgroundColor: this.state.posColor}]}>
-          {this.state.imgComp}
-        </View>
+            {this.state.imgComp}
       </View>
 
     );
@@ -172,6 +163,7 @@ class GameBoard extends Component {
     super(props);
     this.state = {
 
+      curPlayer : "white",
       grid: [],
       whitePieces: [],
       blackPieces: [],
@@ -191,7 +183,6 @@ class GameBoard extends Component {
         this.state.grid[i][j].color = squareColor;
         this.state.grid[i][j].curPiece = "none";
         this.state.grid[i][j].position = [i,j]; // im pretty sure there is a. smart way to do this. eh
-        this.state.grid[i][j].isPos = false;
         if(squareColor == "white"){
           squareColor = 'black';
         }
@@ -252,7 +243,6 @@ class GameBoard extends Component {
 
 
   }
-  
   render(){
 
     return(
