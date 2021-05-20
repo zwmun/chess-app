@@ -20,8 +20,19 @@ class Pawn {
       this.img = require("./photos/bPawn.png")
     }
   }
-  move = (board) => {
+  move = (board, update) => {
+    console.log("this is a " + this.color + "pawn")
+    // prerequesits to moving: must be your turn, king must be safe
+    startX = this.curPosition[0];
+    startY = this.curposition[1];
 
+    if(!this.hasMoved){
+      if(this.color = "white"){
+          
+      }
+    }
+
+    update();
   }
 }
 
@@ -39,9 +50,7 @@ class Knight {
     }
   }
   move = () => {
-    
-
-
+    console.log("this is a " + this.color + "knight")
   }
 }
 
@@ -59,9 +68,7 @@ class Bishop {
     }
   }
   move = () => {
-    
-
-
+    console.log("this is a " + this.color + "bishop")
   }
 }
 
@@ -79,9 +86,7 @@ class Rook {
     }
   }
   move = () => {
-    
-
-
+    console.log("this is a " + this.color + "rook")
   }
 }
 
@@ -99,9 +104,7 @@ class Queen {
     }
   }
   move = () => {
-    
-
-
+    console.log("this is a " + this.color + "queen")
   }
 }
 
@@ -119,9 +122,7 @@ class King {
     }
   }
   move = () => {
-    
-
-
+    console.log("this is a " + this.color + "king")
   }
 }
 
@@ -138,9 +139,21 @@ class GameSquare extends Component {
     if(this.state.color == "black"){
       this.state.color = "gray";
     }
+  }
+
+  returnImg = () => {
+
     if(this.props.curPiece != 'none'){
-      this.state.imgComp = <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />;
-    };
+      this.state.imgComp = 
+        <TouchableHighlight onPress = {() => this.props.curPiece.move(this.props.board, this.props.updateBoard)}>
+          <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
+        </TouchableHighlight>;
+    }
+    else{
+      this.state.imgComp = <View></View>;
+    }
+    return this.state.imgComp;
+
   }
 
   render(){
@@ -148,7 +161,7 @@ class GameSquare extends Component {
     return(
 
       <View style={[styles.gameSquare, {backgroundColor: this.state.color}]}>
-            {this.state.imgComp}
+            {this.returnImg()}
       </View>
 
     );
@@ -243,6 +256,12 @@ class GameBoard extends Component {
 
 
   }
+  
+  updateBoard = () => {
+
+    this.setState({});
+    
+  }
   render(){
 
     return(
@@ -251,6 +270,9 @@ class GameBoard extends Component {
           obj.map((nestedObj) =>
            <GameSquare
             {...nestedObj}
+            board = {this.state.grid}
+            updateBoard = {this.updateBoard}
+            player = {this.state.curPlayer}
           /> 
           )
         )}
