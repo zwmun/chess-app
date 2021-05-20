@@ -12,6 +12,7 @@ class Pawn {
     this.inPlay = true;
     this.img;
     this.curPosition;
+    this.hasMoved = false;
     if(this.color == "white"){
       this.img = require("./photos/wPawn.png")
     }
@@ -19,7 +20,7 @@ class Pawn {
       this.img = require("./photos/bPawn.png")
     }
   }
-  move = () => {
+  move = (board) => {
     
 
 
@@ -126,6 +127,7 @@ class King {
   }
 }
 
+
 class GameSquare extends Component {
 
   constructor(props){
@@ -133,13 +135,19 @@ class GameSquare extends Component {
     this.state = {
       color : this.props.color,
       imgComp : <View></View>,
+      posColor : '#0000000',
+      isPos : this.props.isPos,
     };
+    if(this.state.isPos){
+      this.state.posColor = "#00FFFFA0";
+    }
+
     if(this.state.color == "black"){
       this.state.color = "gray";
     }
     if(this.props.curPiece != 'none'){
       this.state.imgComp = <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
-    }
+    };
   }
 
   render(){
@@ -147,7 +155,9 @@ class GameSquare extends Component {
     return(
 
       <View style={[styles.gameSquare, {backgroundColor: this.state.color}]}>
-        {this.state.imgComp}
+        <View style={[styles.gameSquare, {backgroundColor: this.state.posColor}]}>
+          {this.state.imgComp}
+        </View>
       </View>
 
     );
@@ -180,6 +190,8 @@ class GameBoard extends Component {
         this.state.grid[i][j] = {};
         this.state.grid[i][j].color = squareColor;
         this.state.grid[i][j].curPiece = "none";
+        this.state.grid[i][j].position = [i,j]; // im pretty sure there is a. smart way to do this. eh
+        this.state.grid[i][j].isPos = false;
         if(squareColor == "white"){
           squareColor = 'black';
         }
@@ -226,6 +238,15 @@ class GameBoard extends Component {
 
       this.state.grid[0][i].curPiece = this.state.blackPieces[i];
       this.state.grid[1][i].curPiece = blackPawn;
+
+    }
+    for(var i = 0; i < 8; i ++){
+
+      for(var j = 0; j < 8; j++){
+        if(this.state.grid[i][j].curPiece != 'none'){
+          this.state.grid[i][j].curPiece.curPosition = this.state.grid[i][j].position;
+        }
+      }
 
     }
 
