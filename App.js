@@ -133,11 +133,73 @@ class Pawn {
             board[startX - 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
           }
         }
+        if(board[startX][startY + 1].curPiece != "none"){
+          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+            board[startX - 1][startY + 1].posSquare = true;
+            board[startX - 1][startY + 1].movingPiece = this;
+            board[startX - 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+          }
+        }
       }
+      else if(this.curPosition[1] == 0){
+        if(board[startX][startY + 1].curPiece != "none"){
+          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+            board[startX - 1][startY + 1].posSquare = true;
+            board[startX - 1][startY + 1].movingPiece = this;
+            board[startX - 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+          }
+        }
+      }
+      else if(this.curPosition[1] == 7){
+        if(board[startX][startY - 1].curPiece != "none"){
+          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+            board[startX - 1][startY - 1].posSquare = true;
+            board[startX - 1][startY - 1].movingPiece = this;
+            board[startX - 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+          }
+        }
+      }
+
     }
   }
   else{
+    if(this.curPosition[0] == 4){
+      if(this.curPosition[1] < 7 && this.curPosition[1] > 0){
+        if(board[startX][startY - 1].curPiece != "none"){
+          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+            board[startX + 1][startY - 1].posSquare = true;
+            board[startX + 1][startY - 1].movingPiece = this;
+            board[startX + 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+          }
+        }
+        if(board[startX][startY + 1].curPiece != "none"){
+          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+            board[startX + 1][startY + 1].posSquare = true;
+            board[startX + 1][startY + 1].movingPiece = this;
+            board[startX + 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+          }
+        }
+      }
+      else if(this.curPosition[1] == 0){
+        if(board[startX][startY + 1].curPiece != "none"){
+          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+            board[startX + 1][startY + 1].posSquare = true;
+            board[startX + 1][startY + 1].movingPiece = this;
+            board[startX + 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+          }
+        }
+      }
+      else if(this.curPosition[1] == 7){
+        if(board[startX][startY - 1].curPiece != "none"){
+          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+            board[startX + 1][startY - 1].posSquare = true;
+            board[startX + 1][startY - 1].movingPiece = this;
+            board[startX + 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+          }
+        }
+      }
 
+    }
   }
 
     update();
