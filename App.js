@@ -21,14 +21,49 @@ class Pawn {
     }
   }
   move = (board, update) => {
-    console.log("this is a " + this.color + "pawn")
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j ++){
+        board[i][j].posSquare = false;
+      }
+    }
     // prerequesits to moving: must be your turn, king must be safe
-    startX = this.curPosition[0];
-    startY = this.curposition[1];
+    var startX = this.curPosition[0];
+    var startY = this.curPosition[1];
 
     if(!this.hasMoved){
-      if(this.color = "white"){
-          
+      if(this.color == "white"){
+        if(board[startX - 1][startY].curPiece == "none"){
+          board[startX - 1][startY].posSquare = true;
+          board[startX - 1][startY].movingPiece = this;
+          if(board[startX - 2][startY].curPiece == "none"){
+            board[startX - 2][startY].posSquare = true;
+            board[startX - 2][startY].movingPiece = this;
+          }
+        }
+      }
+      else{
+        if(board[startX + 1][startY].curPiece == "none"){
+          board[startX + 1][startY].posSquare = true;
+          board[startX + 1][startY].movingPiece = this;
+          if(board[startX + 2][startY].curPiece == "none"){
+            board[startX + 2][startY].posSquare = true;
+            board[startX + 2][startY].movingPiece = this;
+          }
+        }
+      }
+    }
+    else{
+      if(this.color == "white"){
+        if(board[startX - 1][startY].curPiece == "none"){
+          board[startX - 1][startY].posSquare = true;
+          board[startX - 1][startY].movingPiece = this;
+        }
+      }
+      else{
+        if(board[startX + 1][startY].curPiece == "none"){
+          board[startX + 1][startY].posSquare = true;
+          board[startX + 1][startY].movingPiece = this;
+        }
       }
     }
 
@@ -141,6 +176,31 @@ class GameSquare extends Component {
     }
   }
 
+  movePiece = () => {
+    var flag = false;
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j ++){
+        if(this.props.board[i][j].curPiece == this.props.movingPiece){
+          this.props.board[this.props.position[0]][this.props.position[1]].curPiece = this.props.board[i][j].curPiece;
+          this.props.board[i][j].curPiece = "none";
+          console.log(this.props.board[this.props.position[0]][this.props.position[1]].curPiece);
+          flag = true;
+          break;
+        }
+      }
+      if(flag){break};
+    }
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j ++){
+        this.props.board[i][j].posSquare = false;
+      }
+    }
+    this.props.movingPiece.hasMoved = true;
+    this.props.movingPiece.curPosition = this.props.position;
+    this.props.updateBoard();
+
+  }
+
   returnImg = () => {
 
     if(this.props.curPiece != 'none'){
@@ -148,9 +208,25 @@ class GameSquare extends Component {
         <TouchableHighlight onPress = {() => this.props.curPiece.move(this.props.board, this.props.updateBoard)}>
           <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
         </TouchableHighlight>;
+      if(this.props.posSquare){
+        this.state.imgComp =
+        <TouchableHighlight onPress = {() => this.movePiece()}>
+          <View style={[styles.gameSquare, {backgroundColor: "#00FFFFAE"}]}>
+            <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
+          </View>
+        </TouchableHighlight>;
+      }
+
     }
     else{
       this.state.imgComp = <View></View>;
+      if(this.props.posSquare){
+        this.state.imgComp =
+        <TouchableHighlight onPress = {() => this.movePiece()}>
+          <View style={[styles.gameSquare, {backgroundColor: "#00FFFFAE"}]}>
+          </View>
+        </TouchableHighlight>;
+      }
     }
     return this.state.imgComp;
 
@@ -195,6 +271,7 @@ class GameBoard extends Component {
         this.state.grid[i][j] = {};
         this.state.grid[i][j].color = squareColor;
         this.state.grid[i][j].curPiece = "none";
+        this.state.grid[i][j].posSquare = false;
         this.state.grid[i][j].position = [i,j]; // im pretty sure there is a. smart way to do this. eh
         if(squareColor == "white"){
           squareColor = 'black';
