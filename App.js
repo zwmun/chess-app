@@ -496,8 +496,143 @@ class Queen {
       this.img = require("./photos/bQueen.png")
     }
   }
-  move = () => {
-    console.log("this is a " + this.color + "queen")
+  move = (board, update) => {
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j ++){
+        board[i][j].posSquare = false;
+      }
+    }
+    var startX = this.curPosition[0];
+    var startY = this.curPosition[1];
+
+    var tempX = startX;
+    var tempY = startY;
+    while(tempX < 7 && tempY < 7){
+      tempX++
+      tempY++
+      if((board[tempX][tempY].curPiece != 'none' 
+      && board[tempX][tempY].curPiece.color != this.color) 
+      || (board[tempX][tempY].curPiece == 'none')){
+
+        board[tempX][tempY].posSquare = true;
+        board[tempX][tempY].movingPiece = this;
+      }
+      if(board[tempX][tempY].curPiece != 'none'){
+        break;
+      }
+    }
+
+    var tempX = startX;
+    var tempY = startY;
+    while(tempX < 7 && tempY > 0){
+      tempX++
+      tempY--
+      if((board[tempX][tempY].curPiece != 'none' 
+      && board[tempX][tempY].curPiece.color != this.color) 
+      || (board[tempX][tempY].curPiece == 'none')){
+
+        board[tempX][tempY].posSquare = true;
+        board[tempX][tempY].movingPiece = this;
+      }
+      if(board[tempX][tempY].curPiece != 'none'){
+        break;
+      }
+    }
+
+    var tempX = startX;
+    var tempY = startY;
+    while(tempX > 0 && tempY >0 ){
+      tempX--;
+      tempY--;
+      if((board[tempX][tempY].curPiece != 'none' 
+      && board[tempX][tempY].curPiece.color != this.color) 
+      || (board[tempX][tempY].curPiece == 'none')){
+
+        board[tempX][tempY].posSquare = true;
+        board[tempX][tempY].movingPiece = this;
+      }
+      if(board[tempX][tempY].curPiece != 'none'){
+        break;
+      }
+    }
+
+    var tempX = startX;
+    var tempY = startY;
+    while(tempX > 0 && tempY < 7){
+      tempX--
+      tempY++
+      if((board[tempX][tempY].curPiece != 'none' 
+      && board[tempX][tempY].curPiece.color != this.color) 
+      || (board[tempX][tempY].curPiece == 'none')){
+
+        board[tempX][tempY].posSquare = true;
+        board[tempX][tempY].movingPiece = this;
+      }
+      if(board[tempX][tempY].curPiece != 'none'){
+        break;
+      }
+    }
+    var startX = this.curPosition[0];
+    var startY = this.curPosition[1];
+
+    var tempX = startX;
+    var tempY = startY;
+    while(tempX < 7){
+      tempX++;
+      if((board[tempX][startY].curPiece != 'none' 
+      && board[tempX][startY].curPiece.color != this.color) 
+      || (board[tempX][startY].curPiece == 'none')){
+        board[tempX][startY].posSquare = true;
+        board[tempX][startY].movingPiece = this;
+      }
+
+      if(board[tempX][startY].curPiece != 'none'){
+        break;
+      }
+    }
+    var tempX = startX;
+    while(tempX > 0){
+      tempX--;
+      if((board[tempX][startY].curPiece != 'none' 
+      && board[tempX][startY].curPiece.color != this.color) 
+      || (board[tempX][startY].curPiece == 'none')){
+        board[tempX][startY].posSquare = true;
+        board[tempX][startY].movingPiece = this;
+      }
+
+      if(board[tempX][startY].curPiece != 'none'){
+        break;
+      }
+    }
+    var tempY = startY;
+    while(tempY > 0){
+      tempY--;
+      if((board[startX][tempY].curPiece != 'none' 
+      && board[startX][tempY].curPiece.color != this.color) 
+      || (board[startX][tempY].curPiece == 'none')){
+        board[startX][tempY].posSquare = true;
+        board[startX][tempY].movingPiece = this;
+      }
+
+      if(board[startX][tempY].curPiece != 'none'){
+        break;
+      }
+    }
+    var tempY = startY;
+    while(tempY < 7){
+      tempY++;
+      if((board[startX][tempY].curPiece != 'none' 
+      && board[startX][tempY].curPiece.color != this.color) 
+      || (board[startX][tempY].curPiece == 'none')){
+        board[startX][tempY].posSquare = true;
+        board[startX][tempY].movingPiece = this;
+      }
+
+      if(board[startX][tempY].curPiece != 'none'){
+        break;
+      }
+    }
+    update();
   }
 }
 
