@@ -56,7 +56,7 @@ class Pawn {
       }
       else{
         if(this.color == "white"){
-          if(board[startX - 1][startY].curPiece == "none"){
+          if(board[startX - 1][startY].curPiece == "none" ){
             board[startX - 1][startY].posSquare = true;
             board[startX - 1][startY].movingPiece = this;
           }
@@ -71,21 +71,21 @@ class Pawn {
     
     if(this.curPosition[1] != 0 && this.curPosition[1] != 7){
       if(this.color == 'white'){
-        if(board[startX - 1][startY + 1].curPiece != "none"){
+        if(board[startX - 1][startY + 1].curPiece != "none"  && board[startX - 1][startY+ 1].curPiece.color != this.color){
           board[startX - 1][startY + 1].posSquare = true;
           board[startX - 1][startY + 1].movingPiece = this;
         }
-        if(board[startX - 1][startY - 1].curPiece != "none"){
+        if(board[startX - 1][startY - 1].curPiece != "none"  && board[startX - 1][startY - 1].curPiece.color != this.color){
           board[startX - 1][startY - 1].posSquare = true;
           board[startX - 1][startY - 1].movingPiece = this;
         }
       }
       else if(this.color == 'black'){
-        if(board[startX + 1][startY + 1].curPiece != "none"){
+        if(board[startX + 1][startY + 1].curPiece != "none" && board[startX +1 ][startY + 1].curPiece.color != this.color){
           board[startX + 1][startY + 1].posSquare = true;
           board[startX + 1][startY + 1].movingPiece = this;
         }
-        if(board[startX + 1][startY - 1].curPiece != "none"){
+        if(board[startX + 1][startY - 1].curPiece != "none"  && board[startX +1 ][startY - 1].curPiece.color != this.color){
           board[startX + 1][startY - 1].posSquare = true;
           board[startX + 1][startY - 1].movingPiece = this;
         }
@@ -93,13 +93,13 @@ class Pawn {
     }
     else if(this.curPosition[1] == 0){
       if(this.color == 'white'){
-        if(board[startX - 1][startY + 1].curPiece != "none"){
+        if(board[startX - 1][startY + 1].curPiece != "none"  && board[startX - 1][startY + 1].curPiece.color != this.color){
           board[startX - 1][startY + 1].posSquare = true;
           board[startX - 1][startY + 1].movingPiece = this;
         }
       }
       else if(this.color == 'black'){
-        if(board[startX + 1][startY + 1].curPiece != "none"){
+        if(board[startX + 1][startY + 1].curPiece != "none"  && board[startX + 1][startY +1].curPiece.color != this.color){
           board[startX + 1][startY + 1].posSquare = true;
           board[startX + 1][startY + 1].movingPiece = this;
         }
@@ -107,13 +107,13 @@ class Pawn {
     } 
     else{
       if(this.color == 'white'){
-        if(board[startX - 1][startY - 1].curPiece != "none"){
+        if(board[startX - 1][startY - 1].curPiece != "none"  && board[startX - 1][startY - 1].curPiece.color != this.color){
           board[startX - 1][startY - 1].posSquare = true;
           board[startX - 1][startY - 1].movingPiece = this;
         }
       }
       else if(this.color == 'black'){
-        if(board[startX + 1][startY - 1].curPiece != "none"){
+        if(board[startX + 1][startY - 1].curPiece != "none"  && board[startX + 1][startY - 1].curPiece.color != this.color){
           board[startX + 1][startY - 1].posSquare = true;
           board[startX + 1][startY - 1].movingPiece = this;
         }
