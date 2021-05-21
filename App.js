@@ -29,44 +29,95 @@ class Pawn {
     // prerequesits to moving: must be your turn, king must be safe
     var startX = this.curPosition[0];
     var startY = this.curPosition[1];
-
-    if(!this.hasMoved){
-      if(this.color == "white"){
-        if(board[startX - 1][startY].curPiece == "none"){
-          board[startX - 1][startY].posSquare = true;
-          board[startX - 1][startY].movingPiece = this;
-          if(board[startX - 2][startY].curPiece == "none"){
-            board[startX - 2][startY].posSquare = true;
-            board[startX - 2][startY].movingPiece = this;
+    if(this.curPosition[0] != 0  && this.curPosition[0] != 7){
+      if(!this.hasMoved){
+        if(this.color == "white"){
+          if(board[startX - 1][startY].curPiece == "none"){
+            board[startX - 1][startY].posSquare = true;
+            board[startX - 1][startY].movingPiece = this;
+            if(board[startX - 2][startY].curPiece == "none"){
+              board[startX - 2][startY].posSquare = true;
+              board[startX - 2][startY].movingPiece = this;
+            }
+          }
+        }
+        else{
+          if(board[startX + 1][startY].curPiece == "none"){
+            board[startX + 1][startY].posSquare = true;
+            board[startX + 1][startY].movingPiece = this;
+            if(board[startX + 2][startY].curPiece == "none"){
+              board[startX + 2][startY].posSquare = true;
+              board[startX + 2][startY].movingPiece = this;
+            }
           }
         }
       }
       else{
-        if(board[startX + 1][startY].curPiece == "none"){
-          board[startX + 1][startY].posSquare = true;
-          board[startX + 1][startY].movingPiece = this;
-          if(board[startX + 2][startY].curPiece == "none"){
-            board[startX + 2][startY].posSquare = true;
-            board[startX + 2][startY].movingPiece = this;
+        if(this.color == "white"){
+          if(board[startX - 1][startY].curPiece == "none"){
+            board[startX - 1][startY].posSquare = true;
+            board[startX - 1][startY].movingPiece = this;
+          }
+        }
+        else{
+          if(board[startX + 1][startY].curPiece == "none"){
+            board[startX + 1][startY].posSquare = true;
+            board[startX + 1][startY].movingPiece = this;
           }
         }
       }
+    
+    if(this.curPosition[1] != 0 && this.curPosition[1] != 7){
+      if(this.color == 'white'){
+        if(board[startX - 1][startY + 1].curPiece != "none"){
+          board[startX - 1][startY + 1].posSquare = true;
+          board[startX - 1][startY + 1].movingPiece = this;
+        }
+        if(board[startX - 1][startY - 1].curPiece != "none"){
+          board[startX - 1][startY - 1].posSquare = true;
+          board[startX - 1][startY - 1].movingPiece = this;
+        }
+      }
+      else if(this.color == 'black'){
+        if(board[startX + 1][startY + 1].curPiece != "none"){
+          board[startX + 1][startY + 1].posSquare = true;
+          board[startX + 1][startY + 1].movingPiece = this;
+        }
+        if(board[startX + 1][startY - 1].curPiece != "none"){
+          board[startX + 1][startY - 1].posSquare = true;
+          board[startX + 1][startY - 1].movingPiece = this;
+        }
+      }
     }
+    else if(this.curPosition[1] == 0){
+      if(this.color == 'white'){
+        if(board[startX - 1][startY + 1].curPiece != "none"){
+          board[startX - 1][startY + 1].posSquare = true;
+          board[startX - 1][startY + 1].movingPiece = this;
+        }
+      }
+      else if(this.color == 'black'){
+        if(board[startX + 1][startY + 1].curPiece != "none"){
+          board[startX + 1][startY + 1].posSquare = true;
+          board[startX + 1][startY + 1].movingPiece = this;
+        }
+      }
+    } 
     else{
-      if(this.color == "white"){
-        if(board[startX - 1][startY].curPiece == "none"){
-          board[startX - 1][startY].posSquare = true;
-          board[startX - 1][startY].movingPiece = this;
+      if(this.color == 'white'){
+        if(board[startX - 1][startY - 1].curPiece != "none"){
+          board[startX - 1][startY - 1].posSquare = true;
+          board[startX - 1][startY - 1].movingPiece = this;
         }
       }
-      else{
-        if(board[startX + 1][startY].curPiece == "none"){
-          board[startX + 1][startY].posSquare = true;
-          board[startX + 1][startY].movingPiece = this;
+      else if(this.color == 'black'){
+        if(board[startX + 1][startY - 1].curPiece != "none"){
+          board[startX + 1][startY - 1].posSquare = true;
+          board[startX + 1][startY - 1].movingPiece = this;
         }
       }
     }
-
+  }
     update();
   }
 }
@@ -181,9 +232,12 @@ class GameSquare extends Component {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         if(this.props.board[i][j].curPiece == this.props.movingPiece){
+          if(this.props.board[this.props.position[0]][this.props.position[1]].curPiece != 'none'){
+            this.props.board[this.props.position[0]][this.props.position[1]].curPiece.inPlay = false;
+          }
           this.props.board[this.props.position[0]][this.props.position[1]].curPiece = this.props.board[i][j].curPiece;
           this.props.board[i][j].curPiece = "none";
-          console.log(this.props.board[this.props.position[0]][this.props.position[1]].curPiece);
+
           flag = true;
           break;
         }
@@ -195,6 +249,7 @@ class GameSquare extends Component {
         this.props.board[i][j].posSquare = false;
       }
     }
+
     this.props.movingPiece.hasMoved = true;
     this.props.movingPiece.curPosition = this.props.position;
     this.props.updateBoard();
