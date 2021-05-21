@@ -752,6 +752,7 @@ class GameSquare extends Component {
   }
 
   movePiece = () => {
+    
     var flag = false;
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
@@ -845,6 +846,8 @@ class GameBoard extends Component {
       grid: [],
       whitePieces: [],
       blackPieces: [],
+      whiteKing : new King('white'),
+      blackKing : new King('black'),
 
     };
 
@@ -878,7 +881,7 @@ class GameBoard extends Component {
       new Knight('white'),
       new Bishop('white'),
       new Queen('white'),
-      new King('white'),
+      this.state.whiteKing,
       new Bishop('white'),
       new Knight('white'),
       new Rook('white'),
@@ -889,7 +892,7 @@ class GameBoard extends Component {
       new Knight('black'),
       new Bishop('black'),
       new Queen('black'),
-      new King('black'),
+      this.state.blackKing,
       new Bishop('black'),
       new Knight('black'),
       new Rook('black'),
@@ -924,6 +927,45 @@ class GameBoard extends Component {
 
   }
   
+  kingSafety = (color) => {
+
+    if(color == "white"){
+
+      for(var i = 0; i < this.state.blackPieces.length; i++){
+        if(this.state.blackPieces[i].inPlay){
+          this.state.blackPieces[i].move(this.state.grid, this.filler);
+          for(var j = 0; j < 8; j ++){
+            for(var k = 0; k < 8; k++){
+              if(this.state.grid[j][k].posSquare){
+                if((this.state.whiteKing.curPosition[0] == this.state.grid[j][k].position[0])
+                  && (this.state.whiteKing.curPosition[1] == this.state.grid[j][k].position[1])){
+                  for(var i = 0; i < 8; i ++){
+                    for(var j = 0; j < 8; j ++){
+                      this.state.grid[i][j].posSquare = false;
+                    }
+                  }
+                  return false;
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j ++){
+        this.state.grid[i][j].posSquare = false;
+      }
+    }
+    return true;
+
+  }
+
+  filler = () => {
+    
+  }
+
   updateBoard = () => {
 
     this.setState({});
@@ -940,6 +982,7 @@ class GameBoard extends Component {
             board = {this.state.grid}
             updateBoard = {this.updateBoard}
             player = {this.state.curPlayer}
+            safety = {this.kingSafety}
           /> 
           )
         )}
