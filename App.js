@@ -219,8 +219,92 @@ class Knight {
       this.img = require("./photos/bKnight.png")
     }
   }
-  move = () => {
-    console.log("this is a " + this.color + "knight")
+  move = (board, update) => {
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j ++){
+        board[i][j].posSquare = false;
+      }
+    }
+    var startX = this.curPosition[0];
+    var startY = this.curPosition[1];
+      // vertical
+    if(((startX - 2) >= 0) && ((startY - 1) >= 0)){
+      if((board[startX - 2][startY - 1].curPiece != 'none' && 
+        board[startX - 2][startY - 1].curPiece.color != this.color) 
+        || (board[startX - 2][startY - 1].curPiece == 'none')){
+
+        board[startX - 2][startY - 1].posSquare = true;
+        board[startX - 2][startY - 1].movingPiece = this;
+      }
+    }
+    if(((startX - 2) >= 0) && ((startY + 1) <= 7)){
+      if((board[startX - 2][startY + 1].curPiece != 'none' && 
+        board[startX - 2][startY + 1].curPiece.color != this.color) 
+        || (board[startX - 2][startY + 1].curPiece == 'none')){
+
+        board[startX - 2][startY + 1].posSquare = true;
+        board[startX - 2][startY + 1].movingPiece = this;
+      }
+    }
+
+    if(((startX + 2) <= 7) && ((startY - 1) >= 0)){
+      if((board[startX + 2][startY - 1].curPiece != 'none' && 
+        board[startX + 2][startY - 1].curPiece.color != this.color) 
+        || (board[startX + 2][startY - 1].curPiece == 'none')){
+
+        board[startX + 2][startY - 1].posSquare = true;
+        board[startX + 2][startY - 1].movingPiece = this;
+      }
+    }
+    if(((startX + 2) <= 7) && ((startY + 1) <= 7)){
+      if((board[startX + 2][startY + 1].curPiece != 'none' && 
+      board[startX + 2][startY + 1].curPiece.color != this.color) 
+      || (board[startX + 2][startY + 1].curPiece == 'none')){
+
+        board[startX + 2][startY + 1].posSquare = true;
+        board[startX + 2][startY + 1].movingPiece = this;
+      }
+    }
+    // horizontal 
+    if(((startX - 1) >= 0) && ((startY - 2) >= 0)){
+      if((board[startX - 1][startY - 2].curPiece != 'none' && 
+        board[startX - 1][startY - 2].curPiece.color != this.color) 
+        || (board[startX - 1][startY - 2].curPiece == 'none')){
+
+        board[startX - 1][startY - 2].posSquare = true;
+        board[startX - 1][startY - 2].movingPiece = this;
+      }
+    }
+    if(((startX - 1) >= 0) && ((startY + 2) <= 7)){
+      if((board[startX - 1][startY + 2].curPiece != 'none' && 
+        board[startX - 1][startY + 2].curPiece.color != this.color) 
+        || (board[startX - 1][startY + 2].curPiece == 'none')){
+
+        board[startX - 1][startY + 2].posSquare = true;
+        board[startX - 1][startY + 2].movingPiece = this;
+      }
+    }
+
+    if(((startX + 1) <= 7) && ((startY - 2) >= 0)){
+      if((board[startX + 1][startY - 2].curPiece != 'none' && 
+        board[startX + 1][startY - 2].curPiece.color != this.color) 
+        || (board[startX + 1][startY - 2].curPiece == 'none')){
+
+        board[startX + 1][startY - 2].posSquare = true;
+        board[startX + 1][startY - 2].movingPiece = this;
+      }
+    }
+    if(((startX + 1) <= 7) && ((startY + 2) <= 7)){
+      if((board[startX + 1][startY + 2].curPiece != 'none' && 
+      board[startX + 1][startY + 2].curPiece.color != this.color) 
+      || (board[startX + 1][startY + 2].curPiece == 'none')){
+
+        board[startX + 1][startY + 2].posSquare = true;
+        board[startX + 1][startY + 2].movingPiece = this;
+      }
+    }
+    
+   update();
   }
 }
 
