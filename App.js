@@ -13,6 +13,8 @@ class Pawn {
     this.img;
     this.curPosition;
     this.hasMoved = false;
+    this.justMoved = false;
+    this.type = "pawn";
     if(this.color == "white"){
       this.img = require("./photos/wPawn.png")
     }
@@ -118,6 +120,26 @@ class Pawn {
       }
     }
   }
+
+  // en passant
+  // separate for my own sanity
+  if(this.color == 'white'){
+    if(this.curPosition[0] == 3){
+      if(this.curPosition[1] < 7 && this.curPosition[1] > 0){
+        if(board[startX][startY - 1].curPiece != "none"){
+          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+            board[startX - 1][startY - 1].posSquare = true;
+            board[startX - 1][startY - 1].movingPiece = this;
+            board[startX - 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+          }
+        }
+      }
+    }
+  }
+  else{
+
+  }
+
     update();
   }
 }
@@ -247,9 +269,19 @@ class GameSquare extends Component {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         this.props.board[i][j].posSquare = false;
+        if(this.props.board[i][j].curPiece != "none"){
+          this.props.board[i][j].curPiece.justMoved = false;
+          if(this.props.board[i][j].curPiece == this.props.enPassant){
+            this.props.board[i][j].curPiece.inPlay = false;
+            this.props.board[i][j].curPiece = "none";
+            this.enPassant = "none";
+          }
+        }
       }
     }
-
+    if(this.props.movingPiece.type == "pawn" && this.props.movingPiece.hasMoved == false){
+      this.props.movingPiece.justMoved = true;
+    }
     this.props.movingPiece.hasMoved = true;
     this.props.movingPiece.curPosition = this.props.position;
     this.props.updateBoard();
@@ -327,6 +359,7 @@ class GameBoard extends Component {
         this.state.grid[i][j].color = squareColor;
         this.state.grid[i][j].curPiece = "none";
         this.state.grid[i][j].posSquare = false;
+        this.state.grid[i][j].enPassant = "none";
         this.state.grid[i][j].position = [i,j]; // im pretty sure there is a. smart way to do this. eh
         if(squareColor == "white"){
           squareColor = 'black';
