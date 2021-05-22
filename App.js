@@ -22,7 +22,7 @@ class Pawn {
       this.img = require("./photos/bPawn.png")
     }
   }
-  move = (board, update) => {
+  move = (board, update, pruneMoves) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -201,7 +201,7 @@ class Pawn {
 
     }
   }
-
+    pruneMoves(this);
     update();
   }
 }
@@ -219,7 +219,7 @@ class Knight {
       this.img = require("./photos/bKnight.png")
     }
   }
-  move = (board, update) => {
+  move = (board, update, pruneMoves) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -303,8 +303,8 @@ class Knight {
         board[startX + 1][startY + 2].movingPiece = this;
       }
     }
-    
-   update();
+    pruneMoves(this);
+    update();
   }
 }
 
@@ -321,7 +321,7 @@ class Bishop {
       this.img = require("./photos/bBishop.png")
     }
   }
-  move = (board, update) => {
+  move = (board, update, pruneMoves) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -397,6 +397,7 @@ class Bishop {
         break;
       }
     }
+    pruneMoves(this);
     update();
   }
 }
@@ -414,7 +415,7 @@ class Rook {
       this.img = require("./photos/bRook.png")
     }
   }
-  move = (board, update) => {
+  move = (board, update, pruneMoves) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -479,6 +480,7 @@ class Rook {
         break;
       }
     }
+    pruneMoves(this)
     update();
   }
 }
@@ -496,7 +498,7 @@ class Queen {
       this.img = require("./photos/bQueen.png")
     }
   }
-  move = (board, update) => {
+  move = (board, update, pruneMoves) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -632,6 +634,7 @@ class Queen {
         break;
       }
     }
+    pruneMoves(this)
     update();
   }
 }
@@ -649,7 +652,7 @@ class King {
       this.img = require("./photos/bKing.png")
     }
   }
-  move = (board, update) => {
+  move = (board, update, pruneMoves) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -730,7 +733,7 @@ class King {
         board[startX][startY - 1].movingPiece = this;
       }
     }
-
+    pruneMoves(this)
    update();
 
   }
@@ -795,13 +798,13 @@ class GameSquare extends Component {
 
     if(this.props.curPiece != 'none'){
       this.state.imgComp = 
-        <TouchableHighlight onPress = {() => this.props.curPiece.move(this.props.board, this.props.updateBoard)}>
+        <TouchableHighlight onPress = {() => this.props.curPiece.move(this.props.board, this.props.updateBoard, this.props.pruneMoves)}>
           <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
         </TouchableHighlight>;
       if(this.props.posSquare){
         this.state.imgComp =
         <TouchableHighlight onPress = {() => this.movePiece()}>
-          <View style={[styles.gameSquare, {backgroundColor: "#00FFFFAE"}]}>
+          <View style={[styles.gameSquare, {backgroundColor: "#00FFFF30"}]}>
             <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
           </View>
         </TouchableHighlight>;
@@ -813,7 +816,7 @@ class GameSquare extends Component {
       if(this.props.posSquare){
         this.state.imgComp =
         <TouchableHighlight onPress = {() => this.movePiece()}>
-          <View style={[styles.gameSquare, {backgroundColor: "#00FFFFAE"}]}>
+          <View style={[styles.gameSquare, {backgroundColor: "#00FFFF30"}]}>
           </View>
         </TouchableHighlight>;
       }
@@ -927,13 +930,43 @@ class GameBoard extends Component {
 
   }
   
+  pruneMoves = (piece) => {
+    var curPos = [];
+    for(var i = 0; i < 8; i ++){
+      for(var j=0; j < 8;j ++){
+        if(this.state.grid[i][j].posSquare == true){
+          curPos.push(this.state.grid[i][j].position);
+        }
+      }
+    }
+    for(var i = 0; i < 8; i ++){
+      for(var j=0; j < 8;j ++){
+        if(this.state.grid[i][j].posSquare == true){
+          var fillerPiece = this.state.grid[i][j].curPiece;
+          this.state.grid[i][j].curPiece = piece; // setting up a hypothetical to see if it would stop check
+          if(this.kingSafety(piece.color) != true){
+            this.state.grid[i][j].posSquare = false;
+            console.log(this.state.grid[i][j].position)
+            console.log(curPos.indexOf(this.state.grid[i][j].position))
+            curPos.splice((curPos.indexOf(this.state.grid[i][j].position)), 1)
+            console.log(curPos.indexOf(this.state.grid[i][j].position))
+          }
+          for(var k = 0; k < curPos.length; k ++){
+            this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+          }
+          this.state.grid[i][j].curPiece = fillerPiece;
+        }
+      }
+    }
+
+  }
+
   kingSafety = (color) => {
 
     if(color == "white"){
-
       for(var i = 0; i < this.state.blackPieces.length; i++){
         if(this.state.blackPieces[i].inPlay){
-          this.state.blackPieces[i].move(this.state.grid, this.filler);
+          this.state.blackPieces[i].move(this.state.grid, this.filler, this.filler);
           for(var j = 0; j < 8; j ++){
             for(var k = 0; k < 8; k++){
               if(this.state.grid[j][k].posSquare){
@@ -951,7 +984,28 @@ class GameBoard extends Component {
           }
         }
       }
-
+    }
+    else{
+      for(var i = 0; i < this.state.whitePieces.length; i++){
+        if(this.state.whitePieces[i].inPlay){
+          this.state.whitePieces[i].move(this.state.grid, this.filler, this.filler);
+          for(var j = 0; j < 8; j ++){
+            for(var k = 0; k < 8; k++){
+              if(this.state.grid[j][k].posSquare){
+                if((this.state.blackKing.curPosition[0] == this.state.grid[j][k].position[0])
+                  && (this.state.blackKing.curPosition[1] == this.state.grid[j][k].position[1])){
+                  for(var i = 0; i < 8; i ++){
+                    for(var j = 0; j < 8; j ++){
+                      this.state.grid[i][j].posSquare = false;
+                    }
+                  }
+                  return false;
+                }
+              }
+            }
+          }
+        }
+      }
     }
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
@@ -983,6 +1037,7 @@ class GameBoard extends Component {
             updateBoard = {this.updateBoard}
             player = {this.state.curPlayer}
             safety = {this.kingSafety}
+            pruneMoves = {this.pruneMoves}
           /> 
           )
         )}
