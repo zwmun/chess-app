@@ -734,7 +734,7 @@ class King {
       }
     }
     pruneMoves(this)
-   update();
+    update();
 
   }
 }
@@ -933,32 +933,76 @@ class GameBoard extends Component {
   pruneMoves = (piece) => {
     var curPos = [];
     for(var i = 0; i < 8; i ++){
-      for(var j=0; j < 8;j ++){
+      for(var j = 0; j < 8; j++){
         if(this.state.grid[i][j].posSquare == true){
           curPos.push(this.state.grid[i][j].position);
         }
       }
     }
     for(var i = 0; i < 8; i ++){
-      for(var j=0; j < 8;j ++){
+      for(var j = 0; j < 8; j ++){
         if(this.state.grid[i][j].posSquare == true){
-          var fillerPiece = this.state.grid[i][j].curPiece;
+          /*var fillerPiece = this.state.grid[i][j].curPiece;
+          var fillerPosition = piece.curPosition;
+          if(this.state.grid[i][j].curPiece != 'none' && this.state.grid[i][j].curPiece.color != piece.color){
+            this.state.grid[i][j].curPiece.inPlay = false;
+          }
+          this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece = "none";
           this.state.grid[i][j].curPiece = piece; // setting up a hypothetical to see if it would stop check
+          this.state.grid[i][j].curPiece.curPosition = this.state.grid[i][j].position;
           if(this.kingSafety(piece.color) != true){
             this.state.grid[i][j].posSquare = false;
-            console.log(this.state.grid[i][j].position)
-            console.log(curPos.indexOf(this.state.grid[i][j].position))
+            this.state.grid[i][j].movingPiece = 'none';
             curPos.splice((curPos.indexOf(this.state.grid[i][j].position)), 1)
-            console.log(curPos.indexOf(this.state.grid[i][j].position))
           }
           for(var k = 0; k < curPos.length; k ++){
             this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+            this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = piece;
           }
           this.state.grid[i][j].curPiece = fillerPiece;
+          if(this.state.grid[i][j].curPiece != 'none'){
+            this.state.grid[i][j].curPiece.inPlay = true; 
+            this.state.grid[i][j].curPiece.curPosition = this.state.grid[i][j].position;
+          }
+          this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece = piece;
+          if(this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece != "none"){
+            this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece.curPosition = this.state.grid[piece.curPosition[0]][piece.curPosition[1]].position;
+          }*/
+          var origPosition = [];
+          origPosition[0] = piece.curPosition[0];
+          origPosition[1] = piece.curPosition[1];
+          var fillerPiece = this.state.grid[i][j].curPiece; // we need to keep track of this piece
+          if(this.state.grid[i][j].curPiece != "none" && this.state.grid[i][j].curPiece.color != piece.color){
+            //if there is a piece in this square and it's not our color, we need to operate as if it is not inplay, otherwise we wont be able to take it
+            this.state.grid[i][j].curPiece.inPlay = false; //THIS VALUE MUST BE FIXED
+          }
+
+          //SET UP THE HYPOTHETICAL
+          this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece = "none"; // we cant set up the hypothetical without first moving out piece
+          this.state.grid[i][j].curPiece = piece; // setting up a hypothetical to see if it would stop check
+          this.state.grid[i][j].curPiece.curPosition = this.state.grid[i][j].position; // have to adjust the position 
+          //THESE VALUES MUST BE FIXED ^^^^
+          if(this.kingSafety(piece.color) != true){ //running the hypothetical
+            this.state.grid[i][j].posSquare = false;
+            this.state.grid[i][j].movingPiece = 'none';
+            curPos.splice((curPos.indexOf(this.state.grid[i][j].position)), 1)
+          }
+          for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+            this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+            this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = piece;
+          }
+          this.state.grid[i][j].curPiece = fillerPiece;
+          if(this.state.grid[i][j].curPiece != 'none'){
+            this.state.grid[i][j].curPiece.inPlay = true; 
+            this.state.grid[i][j].curPiece.curPosition = this.state.grid[i][j].position;
+          }
+          this.state.grid[origPosition[0]][origPosition[1]].curPiece = piece;
+          this.state.grid[origPosition[0]][origPosition[1]].curPiece.curPosition = this.state.grid[origPosition[0]][origPosition[1]].position;
+          
         }
       }
     }
-
+    
   }
 
   kingSafety = (color) => {
@@ -1010,6 +1054,7 @@ class GameBoard extends Component {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         this.state.grid[i][j].posSquare = false;
+        this.state.grid[i][j].movingPiece = 'none'
       }
     }
     return true;
