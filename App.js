@@ -790,6 +790,25 @@ class GameSquare extends Component {
     }
     this.props.movingPiece.hasMoved = true;
     this.props.movingPiece.curPosition = this.props.position;
+    
+    if(this.props.movingPiece.type == "pawn"){
+      if(this.props.movingPiece.curPosition[0] == 0 && this.props.movingPiece.color == "white"){
+        var newPiece = new Queen("white");
+        this.props.board[this.props.movingPiece.curPosition[0]][this.props.movingPiece.curPosition[1]].inPlay = false;
+        this.props.board[this.props.movingPiece.curPosition[0]][this.props.movingPiece.curPosition[1]].curPiece = newPiece;
+        this.props.board[this.props.movingPiece.curPosition[0]][this.props.movingPiece.curPosition[1]].curPiece.curPosition = this.props.movingPiece.curPosition
+        this.props.addPiece("white", newPiece)
+      }
+    }
+    if(this.props.movingPiece.type == "pawn"){
+      if(this.props.movingPiece.curPosition[0] == 7 && this.props.movingPiece.color == "black"){
+        var newPiece = new Queen("black");
+        this.props.board[this.props.movingPiece.curPosition[0]][this.props.movingPiece.curPosition[1]].inPlay = false;
+        this.props.board[this.props.movingPiece.curPosition[0]][this.props.movingPiece.curPosition[1]].curPiece = newPiece;
+        this.props.board[this.props.movingPiece.curPosition[0]][this.props.movingPiece.curPosition[1]].curPiece.curPosition = this.props.movingPiece.curPosition
+        this.props.addPiece("black", newPiece)
+      }
+    }
     this.props.updateBoard();
 
   }
@@ -942,32 +961,6 @@ class GameBoard extends Component {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         if(this.state.grid[i][j].posSquare == true){
-          /*var fillerPiece = this.state.grid[i][j].curPiece;
-          var fillerPosition = piece.curPosition;
-          if(this.state.grid[i][j].curPiece != 'none' && this.state.grid[i][j].curPiece.color != piece.color){
-            this.state.grid[i][j].curPiece.inPlay = false;
-          }
-          this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece = "none";
-          this.state.grid[i][j].curPiece = piece; // setting up a hypothetical to see if it would stop check
-          this.state.grid[i][j].curPiece.curPosition = this.state.grid[i][j].position;
-          if(this.kingSafety(piece.color) != true){
-            this.state.grid[i][j].posSquare = false;
-            this.state.grid[i][j].movingPiece = 'none';
-            curPos.splice((curPos.indexOf(this.state.grid[i][j].position)), 1)
-          }
-          for(var k = 0; k < curPos.length; k ++){
-            this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
-            this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = piece;
-          }
-          this.state.grid[i][j].curPiece = fillerPiece;
-          if(this.state.grid[i][j].curPiece != 'none'){
-            this.state.grid[i][j].curPiece.inPlay = true; 
-            this.state.grid[i][j].curPiece.curPosition = this.state.grid[i][j].position;
-          }
-          this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece = piece;
-          if(this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece != "none"){
-            this.state.grid[piece.curPosition[0]][piece.curPosition[1]].curPiece.curPosition = this.state.grid[piece.curPosition[0]][piece.curPosition[1]].position;
-          }*/
           var origPosition = [];
           origPosition[0] = piece.curPosition[0];
           origPosition[1] = piece.curPosition[1];
@@ -1065,6 +1058,16 @@ class GameBoard extends Component {
     
   }
 
+  addPiece = (color, piece) => {
+    if(color == "white"){
+      this.state.whitePieces.push(piece);
+    }
+    else{
+      this.state.blackPieces.push(piece);
+    }
+    this.setState({});
+  }
+
   updateBoard = () => {
 
     this.setState({});
@@ -1083,6 +1086,7 @@ class GameBoard extends Component {
             player = {this.state.curPlayer}
             safety = {this.kingSafety}
             pruneMoves = {this.pruneMoves}
+            addPiece = {this.addPiece}
           /> 
           )
         )}
