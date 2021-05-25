@@ -22,187 +22,190 @@ class Pawn {
       this.img = require("./photos/bPawn.png")
     }
   }
-  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
+  move = (board, update, pruneMoves, turn, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
       }
     }
-    // prerequesits to moving: must be your turn, king must be safe
-    var startX = this.curPosition[0];
-    var startY = this.curPosition[1];
-    if(this.curPosition[0] != 0  && this.curPosition[0] != 7){
-      if(!this.hasMoved){
-        if(this.color == "white"){
-          if(board[startX - 1][startY].curPiece == "none"){
-            board[startX - 1][startY].posSquare = true;
-            board[startX - 1][startY].movingPiece = this;
-            if(board[startX - 2][startY].curPiece == "none"){
-              board[startX - 2][startY].posSquare = true;
-              board[startX - 2][startY].movingPiece = this;
+    console.log(this.color, turn)
+    if(this.color == turn){
+      
+      var startX = this.curPosition[0];
+      var startY = this.curPosition[1];
+      if(this.curPosition[0] != 0  && this.curPosition[0] != 7){
+        if(!this.hasMoved){
+          if(this.color == "white"){
+            if(board[startX - 1][startY].curPiece == "none"){
+              board[startX - 1][startY].posSquare = true;
+              board[startX - 1][startY].movingPiece = this;
+              if(board[startX - 2][startY].curPiece == "none"){
+                board[startX - 2][startY].posSquare = true;
+                board[startX - 2][startY].movingPiece = this;
+              }
+            }
+          }
+          else{
+            if(board[startX + 1][startY].curPiece == "none"){
+              board[startX + 1][startY].posSquare = true;
+              board[startX + 1][startY].movingPiece = this;
+              if(board[startX + 2][startY].curPiece == "none"){
+                board[startX + 2][startY].posSquare = true;
+                board[startX + 2][startY].movingPiece = this;
+              }
             }
           }
         }
         else{
-          if(board[startX + 1][startY].curPiece == "none"){
-            board[startX + 1][startY].posSquare = true;
-            board[startX + 1][startY].movingPiece = this;
-            if(board[startX + 2][startY].curPiece == "none"){
-              board[startX + 2][startY].posSquare = true;
-              board[startX + 2][startY].movingPiece = this;
+          if(this.color == "white"){
+            if(board[startX - 1][startY].curPiece == "none" ){
+              board[startX - 1][startY].posSquare = true;
+              board[startX - 1][startY].movingPiece = this;
+            }
+          }
+          else{
+            if(board[startX + 1][startY].curPiece == "none"){
+              board[startX + 1][startY].posSquare = true;
+              board[startX + 1][startY].movingPiece = this;
             }
           }
         }
+      
+      if(this.curPosition[1] != 0 && this.curPosition[1] != 7){
+        if(this.color == 'white'){
+          if(board[startX - 1][startY + 1].curPiece != "none"  && board[startX - 1][startY+ 1].curPiece.color != this.color){
+            board[startX - 1][startY + 1].posSquare = true;
+            board[startX - 1][startY + 1].movingPiece = this;
+          }
+          if(board[startX - 1][startY - 1].curPiece != "none"  && board[startX - 1][startY - 1].curPiece.color != this.color){
+            board[startX - 1][startY - 1].posSquare = true;
+            board[startX - 1][startY - 1].movingPiece = this;
+          }
+        }
+        else if(this.color == 'black'){
+          if(board[startX + 1][startY + 1].curPiece != "none" && board[startX +1 ][startY + 1].curPiece.color != this.color){
+            board[startX + 1][startY + 1].posSquare = true;
+            board[startX + 1][startY + 1].movingPiece = this;
+          }
+          if(board[startX + 1][startY - 1].curPiece != "none"  && board[startX +1 ][startY - 1].curPiece.color != this.color){
+            board[startX + 1][startY - 1].posSquare = true;
+            board[startX + 1][startY - 1].movingPiece = this;
+          }
+        }
       }
+      else if(this.curPosition[1] == 0){
+        if(this.color == 'white'){
+          if(board[startX - 1][startY + 1].curPiece != "none"  && board[startX - 1][startY + 1].curPiece.color != this.color){
+            board[startX - 1][startY + 1].posSquare = true;
+            board[startX - 1][startY + 1].movingPiece = this;
+          }
+        }
+        else if(this.color == 'black'){
+          if(board[startX + 1][startY + 1].curPiece != "none"  && board[startX + 1][startY +1].curPiece.color != this.color){
+            board[startX + 1][startY + 1].posSquare = true;
+            board[startX + 1][startY + 1].movingPiece = this;
+          }
+        }
+      } 
       else{
-        if(this.color == "white"){
-          if(board[startX - 1][startY].curPiece == "none" ){
-            board[startX - 1][startY].posSquare = true;
-            board[startX - 1][startY].movingPiece = this;
+        if(this.color == 'white'){
+          if(board[startX - 1][startY - 1].curPiece != "none"  && board[startX - 1][startY - 1].curPiece.color != this.color){
+            board[startX - 1][startY - 1].posSquare = true;
+            board[startX - 1][startY - 1].movingPiece = this;
           }
         }
-        else{
-          if(board[startX + 1][startY].curPiece == "none"){
-            board[startX + 1][startY].posSquare = true;
-            board[startX + 1][startY].movingPiece = this;
+        else if(this.color == 'black'){
+          if(board[startX + 1][startY - 1].curPiece != "none"  && board[startX + 1][startY - 1].curPiece.color != this.color){
+            board[startX + 1][startY - 1].posSquare = true;
+            board[startX + 1][startY - 1].movingPiece = this;
           }
-        }
-      }
-    
-    if(this.curPosition[1] != 0 && this.curPosition[1] != 7){
-      if(this.color == 'white'){
-        if(board[startX - 1][startY + 1].curPiece != "none"  && board[startX - 1][startY+ 1].curPiece.color != this.color){
-          board[startX - 1][startY + 1].posSquare = true;
-          board[startX - 1][startY + 1].movingPiece = this;
-        }
-        if(board[startX - 1][startY - 1].curPiece != "none"  && board[startX - 1][startY - 1].curPiece.color != this.color){
-          board[startX - 1][startY - 1].posSquare = true;
-          board[startX - 1][startY - 1].movingPiece = this;
-        }
-      }
-      else if(this.color == 'black'){
-        if(board[startX + 1][startY + 1].curPiece != "none" && board[startX +1 ][startY + 1].curPiece.color != this.color){
-          board[startX + 1][startY + 1].posSquare = true;
-          board[startX + 1][startY + 1].movingPiece = this;
-        }
-        if(board[startX + 1][startY - 1].curPiece != "none"  && board[startX +1 ][startY - 1].curPiece.color != this.color){
-          board[startX + 1][startY - 1].posSquare = true;
-          board[startX + 1][startY - 1].movingPiece = this;
         }
       }
     }
-    else if(this.curPosition[1] == 0){
-      if(this.color == 'white'){
-        if(board[startX - 1][startY + 1].curPiece != "none"  && board[startX - 1][startY + 1].curPiece.color != this.color){
-          board[startX - 1][startY + 1].posSquare = true;
-          board[startX - 1][startY + 1].movingPiece = this;
+
+    // en passant
+    // separate for my own sanity
+    if(this.color == 'white'){
+      if(this.curPosition[0] == 3){
+        if(this.curPosition[1] < 7 && this.curPosition[1] > 0){
+          if(board[startX][startY - 1].curPiece != "none"){
+            if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+              board[startX - 1][startY - 1].posSquare = true;
+              board[startX - 1][startY - 1].movingPiece = this;
+              board[startX - 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+            }
+          }
+          if(board[startX][startY + 1].curPiece != "none"){
+            if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+              board[startX - 1][startY + 1].posSquare = true;
+              board[startX - 1][startY + 1].movingPiece = this;
+              board[startX - 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+            }
+          }
         }
-      }
-      else if(this.color == 'black'){
-        if(board[startX + 1][startY + 1].curPiece != "none"  && board[startX + 1][startY +1].curPiece.color != this.color){
-          board[startX + 1][startY + 1].posSquare = true;
-          board[startX + 1][startY + 1].movingPiece = this;
+        else if(this.curPosition[1] == 0){
+          if(board[startX][startY + 1].curPiece != "none"){
+            if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+              board[startX - 1][startY + 1].posSquare = true;
+              board[startX - 1][startY + 1].movingPiece = this;
+              board[startX - 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+            }
+          }
         }
+        else if(this.curPosition[1] == 7){
+          if(board[startX][startY - 1].curPiece != "none"){
+            if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+              board[startX - 1][startY - 1].posSquare = true;
+              board[startX - 1][startY - 1].movingPiece = this;
+              board[startX - 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+            }
+          }
+        }
+
       }
-    } 
+    }
     else{
-      if(this.color == 'white'){
-        if(board[startX - 1][startY - 1].curPiece != "none"  && board[startX - 1][startY - 1].curPiece.color != this.color){
-          board[startX - 1][startY - 1].posSquare = true;
-          board[startX - 1][startY - 1].movingPiece = this;
+      if(this.curPosition[0] == 4){
+        if(this.curPosition[1] < 7 && this.curPosition[1] > 0){
+          if(board[startX][startY - 1].curPiece != "none"){
+            if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+              board[startX + 1][startY - 1].posSquare = true;
+              board[startX + 1][startY - 1].movingPiece = this;
+              board[startX + 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+            }
+          }
+          if(board[startX][startY + 1].curPiece != "none"){
+            if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+              board[startX + 1][startY + 1].posSquare = true;
+              board[startX + 1][startY + 1].movingPiece = this;
+              board[startX + 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+            }
+          }
         }
-      }
-      else if(this.color == 'black'){
-        if(board[startX + 1][startY - 1].curPiece != "none"  && board[startX + 1][startY - 1].curPiece.color != this.color){
-          board[startX + 1][startY - 1].posSquare = true;
-          board[startX + 1][startY - 1].movingPiece = this;
+        else if(this.curPosition[1] == 0){
+          if(board[startX][startY + 1].curPiece != "none"){
+            if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
+              board[startX + 1][startY + 1].posSquare = true;
+              board[startX + 1][startY + 1].movingPiece = this;
+              board[startX + 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
+            }
+          }
         }
+        else if(this.curPosition[1] == 7){
+          if(board[startX][startY - 1].curPiece != "none"){
+            if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
+              board[startX + 1][startY - 1].posSquare = true;
+              board[startX + 1][startY - 1].movingPiece = this;
+              board[startX + 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
+            }
+          }
+        }
+
       }
     }
-  }
-
-  // en passant
-  // separate for my own sanity
-  if(this.color == 'white'){
-    if(this.curPosition[0] == 3){
-      if(this.curPosition[1] < 7 && this.curPosition[1] > 0){
-        if(board[startX][startY - 1].curPiece != "none"){
-          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
-            board[startX - 1][startY - 1].posSquare = true;
-            board[startX - 1][startY - 1].movingPiece = this;
-            board[startX - 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
-          }
-        }
-        if(board[startX][startY + 1].curPiece != "none"){
-          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
-            board[startX - 1][startY + 1].posSquare = true;
-            board[startX - 1][startY + 1].movingPiece = this;
-            board[startX - 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
-          }
-        }
-      }
-      else if(this.curPosition[1] == 0){
-        if(board[startX][startY + 1].curPiece != "none"){
-          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
-            board[startX - 1][startY + 1].posSquare = true;
-            board[startX - 1][startY + 1].movingPiece = this;
-            board[startX - 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
-          }
-        }
-      }
-      else if(this.curPosition[1] == 7){
-        if(board[startX][startY - 1].curPiece != "none"){
-          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
-            board[startX - 1][startY - 1].posSquare = true;
-            board[startX - 1][startY - 1].movingPiece = this;
-            board[startX - 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
-          }
-        }
-      }
-
+      pruneMoves(this);
+      update();
     }
-  }
-  else{
-    if(this.curPosition[0] == 4){
-      if(this.curPosition[1] < 7 && this.curPosition[1] > 0){
-        if(board[startX][startY - 1].curPiece != "none"){
-          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
-            board[startX + 1][startY - 1].posSquare = true;
-            board[startX + 1][startY - 1].movingPiece = this;
-            board[startX + 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
-          }
-        }
-        if(board[startX][startY + 1].curPiece != "none"){
-          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
-            board[startX + 1][startY + 1].posSquare = true;
-            board[startX + 1][startY + 1].movingPiece = this;
-            board[startX + 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
-          }
-        }
-      }
-      else if(this.curPosition[1] == 0){
-        if(board[startX][startY + 1].curPiece != "none"){
-          if(board[startX][startY + 1].curPiece.type == "pawn" && board[startX][startY + 1].curPiece.justMoved == true){
-            board[startX + 1][startY + 1].posSquare = true;
-            board[startX + 1][startY + 1].movingPiece = this;
-            board[startX + 1][startY + 1].enPassant = board[startX][startY + 1].curPiece;
-          }
-        }
-      }
-      else if(this.curPosition[1] == 7){
-        if(board[startX][startY - 1].curPiece != "none"){
-          if(board[startX][startY - 1].curPiece.type == "pawn" && board[startX][startY - 1].curPiece.justMoved == true){
-            board[startX + 1][startY - 1].posSquare = true;
-            board[startX + 1][startY - 1].movingPiece = this;
-            board[startX + 1][startY - 1].enPassant = board[startX][startY - 1].curPiece;
-          }
-        }
-      }
-
-    }
-  }
-    pruneMoves(this);
-    update();
   }
 }
 
@@ -219,92 +222,94 @@ class Knight {
       this.img = require("./photos/bKnight.png")
     }
   }
-  move = (board, update, pruneMoves, castling) => {
+  move = (board, update, pruneMoves, turn, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
       }
     }
-    var startX = this.curPosition[0];
-    var startY = this.curPosition[1];
-      // vertical
-    if(((startX - 2) >= 0) && ((startY - 1) >= 0)){
-      if((board[startX - 2][startY - 1].curPiece != 'none' && 
-        board[startX - 2][startY - 1].curPiece.color != this.color) 
-        || (board[startX - 2][startY - 1].curPiece == 'none')){
+    if(this.color == turn){
+      var startX = this.curPosition[0];
+      var startY = this.curPosition[1];
+        // vertical
+      if(((startX - 2) >= 0) && ((startY - 1) >= 0)){
+        if((board[startX - 2][startY - 1].curPiece != 'none' && 
+          board[startX - 2][startY - 1].curPiece.color != this.color) 
+          || (board[startX - 2][startY - 1].curPiece == 'none')){
 
-        board[startX - 2][startY - 1].posSquare = true;
-        board[startX - 2][startY - 1].movingPiece = this;
+          board[startX - 2][startY - 1].posSquare = true;
+          board[startX - 2][startY - 1].movingPiece = this;
+        }
       }
-    }
-    if(((startX - 2) >= 0) && ((startY + 1) <= 7)){
-      if((board[startX - 2][startY + 1].curPiece != 'none' && 
-        board[startX - 2][startY + 1].curPiece.color != this.color) 
-        || (board[startX - 2][startY + 1].curPiece == 'none')){
+      if(((startX - 2) >= 0) && ((startY + 1) <= 7)){
+        if((board[startX - 2][startY + 1].curPiece != 'none' && 
+          board[startX - 2][startY + 1].curPiece.color != this.color) 
+          || (board[startX - 2][startY + 1].curPiece == 'none')){
 
-        board[startX - 2][startY + 1].posSquare = true;
-        board[startX - 2][startY + 1].movingPiece = this;
+          board[startX - 2][startY + 1].posSquare = true;
+          board[startX - 2][startY + 1].movingPiece = this;
+        }
       }
-    }
 
-    if(((startX + 2) <= 7) && ((startY - 1) >= 0)){
-      if((board[startX + 2][startY - 1].curPiece != 'none' && 
-        board[startX + 2][startY - 1].curPiece.color != this.color) 
-        || (board[startX + 2][startY - 1].curPiece == 'none')){
+      if(((startX + 2) <= 7) && ((startY - 1) >= 0)){
+        if((board[startX + 2][startY - 1].curPiece != 'none' && 
+          board[startX + 2][startY - 1].curPiece.color != this.color) 
+          || (board[startX + 2][startY - 1].curPiece == 'none')){
 
-        board[startX + 2][startY - 1].posSquare = true;
-        board[startX + 2][startY - 1].movingPiece = this;
+          board[startX + 2][startY - 1].posSquare = true;
+          board[startX + 2][startY - 1].movingPiece = this;
+        }
       }
-    }
-    if(((startX + 2) <= 7) && ((startY + 1) <= 7)){
-      if((board[startX + 2][startY + 1].curPiece != 'none' && 
-      board[startX + 2][startY + 1].curPiece.color != this.color) 
-      || (board[startX + 2][startY + 1].curPiece == 'none')){
+      if(((startX + 2) <= 7) && ((startY + 1) <= 7)){
+        if((board[startX + 2][startY + 1].curPiece != 'none' && 
+        board[startX + 2][startY + 1].curPiece.color != this.color) 
+        || (board[startX + 2][startY + 1].curPiece == 'none')){
 
-        board[startX + 2][startY + 1].posSquare = true;
-        board[startX + 2][startY + 1].movingPiece = this;
+          board[startX + 2][startY + 1].posSquare = true;
+          board[startX + 2][startY + 1].movingPiece = this;
+        }
       }
-    }
-    // horizontal 
-    if(((startX - 1) >= 0) && ((startY - 2) >= 0)){
-      if((board[startX - 1][startY - 2].curPiece != 'none' && 
-        board[startX - 1][startY - 2].curPiece.color != this.color) 
-        || (board[startX - 1][startY - 2].curPiece == 'none')){
+      // horizontal 
+      if(((startX - 1) >= 0) && ((startY - 2) >= 0)){
+        if((board[startX - 1][startY - 2].curPiece != 'none' && 
+          board[startX - 1][startY - 2].curPiece.color != this.color) 
+          || (board[startX - 1][startY - 2].curPiece == 'none')){
 
-        board[startX - 1][startY - 2].posSquare = true;
-        board[startX - 1][startY - 2].movingPiece = this;
+          board[startX - 1][startY - 2].posSquare = true;
+          board[startX - 1][startY - 2].movingPiece = this;
+        }
       }
-    }
-    if(((startX - 1) >= 0) && ((startY + 2) <= 7)){
-      if((board[startX - 1][startY + 2].curPiece != 'none' && 
-        board[startX - 1][startY + 2].curPiece.color != this.color) 
-        || (board[startX - 1][startY + 2].curPiece == 'none')){
+      if(((startX - 1) >= 0) && ((startY + 2) <= 7)){
+        if((board[startX - 1][startY + 2].curPiece != 'none' && 
+          board[startX - 1][startY + 2].curPiece.color != this.color) 
+          || (board[startX - 1][startY + 2].curPiece == 'none')){
 
-        board[startX - 1][startY + 2].posSquare = true;
-        board[startX - 1][startY + 2].movingPiece = this;
+          board[startX - 1][startY + 2].posSquare = true;
+          board[startX - 1][startY + 2].movingPiece = this;
+        }
       }
-    }
 
-    if(((startX + 1) <= 7) && ((startY - 2) >= 0)){
-      if((board[startX + 1][startY - 2].curPiece != 'none' && 
-        board[startX + 1][startY - 2].curPiece.color != this.color) 
-        || (board[startX + 1][startY - 2].curPiece == 'none')){
+      if(((startX + 1) <= 7) && ((startY - 2) >= 0)){
+        if((board[startX + 1][startY - 2].curPiece != 'none' && 
+          board[startX + 1][startY - 2].curPiece.color != this.color) 
+          || (board[startX + 1][startY - 2].curPiece == 'none')){
 
-        board[startX + 1][startY - 2].posSquare = true;
-        board[startX + 1][startY - 2].movingPiece = this;
+          board[startX + 1][startY - 2].posSquare = true;
+          board[startX + 1][startY - 2].movingPiece = this;
+        }
       }
-    }
-    if(((startX + 1) <= 7) && ((startY + 2) <= 7)){
-      if((board[startX + 1][startY + 2].curPiece != 'none' && 
-      board[startX + 1][startY + 2].curPiece.color != this.color) 
-      || (board[startX + 1][startY + 2].curPiece == 'none')){
+      if(((startX + 1) <= 7) && ((startY + 2) <= 7)){
+        if((board[startX + 1][startY + 2].curPiece != 'none' && 
+        board[startX + 1][startY + 2].curPiece.color != this.color) 
+        || (board[startX + 1][startY + 2].curPiece == 'none')){
 
-        board[startX + 1][startY + 2].posSquare = true;
-        board[startX + 1][startY + 2].movingPiece = this;
+          board[startX + 1][startY + 2].posSquare = true;
+          board[startX + 1][startY + 2].movingPiece = this;
+        }
       }
+      pruneMoves(this);
+      update();
     }
-    pruneMoves(this);
-    update();
   }
 }
 
@@ -321,84 +326,86 @@ class Bishop {
       this.img = require("./photos/bBishop.png")
     }
   }
-  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
+  move = (board, update, pruneMoves, turn, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
       }
     }
-    var startX = this.curPosition[0];
-    var startY = this.curPosition[1];
+    if(this.color == turn){
+      var startX = this.curPosition[0];
+      var startY = this.curPosition[1];
 
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX < 7 && tempY < 7){
-      tempX++
-      tempY++
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX < 7 && tempY < 7){
+        tempX++
+        tempY++
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
 
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
       }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
+
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX < 7 && tempY > 0){
+        tempX++
+        tempY--
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
+
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
       }
+
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX > 0 && tempY >0 ){
+        tempX--;
+        tempY--;
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
+
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX > 0 && tempY < 7){
+        tempX--
+        tempY++
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
+
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+      pruneMoves(this);
+      update();
     }
-
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX < 7 && tempY > 0){
-      tempX++
-      tempY--
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
-
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
-      }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX > 0 && tempY >0 ){
-      tempX--;
-      tempY--;
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
-
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
-      }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX > 0 && tempY < 7){
-      tempX--
-      tempY++
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
-
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
-      }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-    pruneMoves(this);
-    update();
   }
 }
 
@@ -416,73 +423,75 @@ class Rook {
       this.img = require("./photos/bRook.png")
     }
   }
-  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
+  move = (board, update, pruneMoves, turn, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
       }
     }
-    var startX = this.curPosition[0];
-    var startY = this.curPosition[1];
+    if(this.color == turn){
+      var startX = this.curPosition[0];
+      var startY = this.curPosition[1];
 
-    var tempX = startX;
-    while(tempX < 7){
-      tempX++;
-      if((board[tempX][startY].curPiece != 'none' 
-      && board[tempX][startY].curPiece.color != this.color) 
-      || (board[tempX][startY].curPiece == 'none')){
-        board[tempX][startY].posSquare = true;
-        board[tempX][startY].movingPiece = this;
-      }
+      var tempX = startX;
+      while(tempX < 7){
+        tempX++;
+        if((board[tempX][startY].curPiece != 'none' 
+        && board[tempX][startY].curPiece.color != this.color) 
+        || (board[tempX][startY].curPiece == 'none')){
+          board[tempX][startY].posSquare = true;
+          board[tempX][startY].movingPiece = this;
+        }
 
-      if(board[tempX][startY].curPiece != 'none'){
-        break;
+        if(board[tempX][startY].curPiece != 'none'){
+          break;
+        }
       }
+      var tempX = startX;
+      while(tempX > 0){
+        tempX--;
+        if((board[tempX][startY].curPiece != 'none' 
+        && board[tempX][startY].curPiece.color != this.color) 
+        || (board[tempX][startY].curPiece == 'none')){
+          board[tempX][startY].posSquare = true;
+          board[tempX][startY].movingPiece = this;
+        }
+
+        if(board[tempX][startY].curPiece != 'none'){
+          break;
+        }
+      }
+      var tempY = startY;
+      while(tempY > 0){
+        tempY--;
+        if((board[startX][tempY].curPiece != 'none' 
+        && board[startX][tempY].curPiece.color != this.color) 
+        || (board[startX][tempY].curPiece == 'none')){
+          board[startX][tempY].posSquare = true;
+          board[startX][tempY].movingPiece = this;
+        }
+
+        if(board[startX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+      var tempY = startY;
+      while(tempY < 7){
+        tempY++;
+        if((board[startX][tempY].curPiece != 'none' 
+        && board[startX][tempY].curPiece.color != this.color) 
+        || (board[startX][tempY].curPiece == 'none')){
+          board[startX][tempY].posSquare = true;
+          board[startX][tempY].movingPiece = this;
+        }
+
+        if(board[startX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+      pruneMoves(this)
+      update();
     }
-    var tempX = startX;
-    while(tempX > 0){
-      tempX--;
-      if((board[tempX][startY].curPiece != 'none' 
-      && board[tempX][startY].curPiece.color != this.color) 
-      || (board[tempX][startY].curPiece == 'none')){
-        board[tempX][startY].posSquare = true;
-        board[tempX][startY].movingPiece = this;
-      }
-
-      if(board[tempX][startY].curPiece != 'none'){
-        break;
-      }
-    }
-    var tempY = startY;
-    while(tempY > 0){
-      tempY--;
-      if((board[startX][tempY].curPiece != 'none' 
-      && board[startX][tempY].curPiece.color != this.color) 
-      || (board[startX][tempY].curPiece == 'none')){
-        board[startX][tempY].posSquare = true;
-        board[startX][tempY].movingPiece = this;
-      }
-
-      if(board[startX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-    var tempY = startY;
-    while(tempY < 7){
-      tempY++;
-      if((board[startX][tempY].curPiece != 'none' 
-      && board[startX][tempY].curPiece.color != this.color) 
-      || (board[startX][tempY].curPiece == 'none')){
-        board[startX][tempY].posSquare = true;
-        board[startX][tempY].movingPiece = this;
-      }
-
-      if(board[startX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-    pruneMoves(this)
-    update();
   }
 }
 
@@ -499,144 +508,146 @@ class Queen {
       this.img = require("./photos/bQueen.png")
     }
   }
-  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
+  move = (board, update, pruneMoves, turn, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
       }
     }
-    var startX = this.curPosition[0];
-    var startY = this.curPosition[1];
+    if(this.color == turn){
+      var startX = this.curPosition[0];
+      var startY = this.curPosition[1];
 
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX < 7 && tempY < 7){
-      tempX++
-      tempY++
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX < 7 && tempY < 7){
+        tempX++
+        tempY++
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
 
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
       }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
+
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX < 7 && tempY > 0){
+        tempX++
+        tempY--
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
+
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
       }
+
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX > 0 && tempY >0 ){
+        tempX--;
+        tempY--;
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
+
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX > 0 && tempY < 7){
+        tempX--
+        tempY++
+        if((board[tempX][tempY].curPiece != 'none' 
+        && board[tempX][tempY].curPiece.color != this.color) 
+        || (board[tempX][tempY].curPiece == 'none')){
+
+          board[tempX][tempY].posSquare = true;
+          board[tempX][tempY].movingPiece = this;
+        }
+        if(board[tempX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+      var startX = this.curPosition[0];
+      var startY = this.curPosition[1];
+
+      var tempX = startX;
+      var tempY = startY;
+      while(tempX < 7){
+        tempX++;
+        if((board[tempX][startY].curPiece != 'none' 
+        && board[tempX][startY].curPiece.color != this.color) 
+        || (board[tempX][startY].curPiece == 'none')){
+          board[tempX][startY].posSquare = true;
+          board[tempX][startY].movingPiece = this;
+        }
+
+        if(board[tempX][startY].curPiece != 'none'){
+          break;
+        }
+      }
+      var tempX = startX;
+      while(tempX > 0){
+        tempX--;
+        if((board[tempX][startY].curPiece != 'none' 
+        && board[tempX][startY].curPiece.color != this.color) 
+        || (board[tempX][startY].curPiece == 'none')){
+          board[tempX][startY].posSquare = true;
+          board[tempX][startY].movingPiece = this;
+        }
+
+        if(board[tempX][startY].curPiece != 'none'){
+          break;
+        }
+      }
+      var tempY = startY;
+      while(tempY > 0){
+        tempY--;
+        if((board[startX][tempY].curPiece != 'none' 
+        && board[startX][tempY].curPiece.color != this.color) 
+        || (board[startX][tempY].curPiece == 'none')){
+          board[startX][tempY].posSquare = true;
+          board[startX][tempY].movingPiece = this;
+        }
+
+        if(board[startX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+      var tempY = startY;
+      while(tempY < 7){
+        tempY++;
+        if((board[startX][tempY].curPiece != 'none' 
+        && board[startX][tempY].curPiece.color != this.color) 
+        || (board[startX][tempY].curPiece == 'none')){
+          board[startX][tempY].posSquare = true;
+          board[startX][tempY].movingPiece = this;
+        }
+
+        if(board[startX][tempY].curPiece != 'none'){
+          break;
+        }
+      }
+      pruneMoves(this)
+      update();
     }
-
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX < 7 && tempY > 0){
-      tempX++
-      tempY--
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
-
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
-      }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX > 0 && tempY >0 ){
-      tempX--;
-      tempY--;
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
-
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
-      }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX > 0 && tempY < 7){
-      tempX--
-      tempY++
-      if((board[tempX][tempY].curPiece != 'none' 
-      && board[tempX][tempY].curPiece.color != this.color) 
-      || (board[tempX][tempY].curPiece == 'none')){
-
-        board[tempX][tempY].posSquare = true;
-        board[tempX][tempY].movingPiece = this;
-      }
-      if(board[tempX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-    var startX = this.curPosition[0];
-    var startY = this.curPosition[1];
-
-    var tempX = startX;
-    var tempY = startY;
-    while(tempX < 7){
-      tempX++;
-      if((board[tempX][startY].curPiece != 'none' 
-      && board[tempX][startY].curPiece.color != this.color) 
-      || (board[tempX][startY].curPiece == 'none')){
-        board[tempX][startY].posSquare = true;
-        board[tempX][startY].movingPiece = this;
-      }
-
-      if(board[tempX][startY].curPiece != 'none'){
-        break;
-      }
-    }
-    var tempX = startX;
-    while(tempX > 0){
-      tempX--;
-      if((board[tempX][startY].curPiece != 'none' 
-      && board[tempX][startY].curPiece.color != this.color) 
-      || (board[tempX][startY].curPiece == 'none')){
-        board[tempX][startY].posSquare = true;
-        board[tempX][startY].movingPiece = this;
-      }
-
-      if(board[tempX][startY].curPiece != 'none'){
-        break;
-      }
-    }
-    var tempY = startY;
-    while(tempY > 0){
-      tempY--;
-      if((board[startX][tempY].curPiece != 'none' 
-      && board[startX][tempY].curPiece.color != this.color) 
-      || (board[startX][tempY].curPiece == 'none')){
-        board[startX][tempY].posSquare = true;
-        board[startX][tempY].movingPiece = this;
-      }
-
-      if(board[startX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-    var tempY = startY;
-    while(tempY < 7){
-      tempY++;
-      if((board[startX][tempY].curPiece != 'none' 
-      && board[startX][tempY].curPiece.color != this.color) 
-      || (board[startX][tempY].curPiece == 'none')){
-        board[startX][tempY].posSquare = true;
-        board[startX][tempY].movingPiece = this;
-      }
-
-      if(board[startX][tempY].curPiece != 'none'){
-        break;
-      }
-    }
-    pruneMoves(this)
-    update();
   }
 }
 
@@ -655,118 +666,119 @@ class King {
       this.img = require("./photos/bKing.png")
     }
   }
-  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
+  move = (board, update, pruneMoves, turn, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
       }
     }
-    var startX = this.curPosition[0];
-    var startY = this.curPosition[1];
-    
-    if(((startX - 1) >= 0) && ((startY - 1) >= 0)){
-      if((board[startX - 1][startY - 1].curPiece != 'none' && 
-        board[startX - 1][startY - 1].curPiece.color != this.color) 
-        || (board[startX - 1][startY - 1].curPiece == 'none')){
+    if(this.color == turn){
+      var startX = this.curPosition[0];
+      var startY = this.curPosition[1];
+      
+      if(((startX - 1) >= 0) && ((startY - 1) >= 0)){
+        if((board[startX - 1][startY - 1].curPiece != 'none' && 
+          board[startX - 1][startY - 1].curPiece.color != this.color) 
+          || (board[startX - 1][startY - 1].curPiece == 'none')){
 
-        board[startX - 1][startY - 1].posSquare = true;
-        board[startX - 1][startY - 1].movingPiece = this;
+          board[startX - 1][startY - 1].posSquare = true;
+          board[startX - 1][startY - 1].movingPiece = this;
+        }
       }
-    }
-    if(((startX + 1) <= 7) && ((startY - 1) >= 0)){
-      if((board[startX + 1][startY - 1].curPiece != 'none' && 
-        board[startX + 1][startY - 1].curPiece.color != this.color) 
-        || (board[startX + 1][startY - 1].curPiece == 'none')){
+      if(((startX + 1) <= 7) && ((startY - 1) >= 0)){
+        if((board[startX + 1][startY - 1].curPiece != 'none' && 
+          board[startX + 1][startY - 1].curPiece.color != this.color) 
+          || (board[startX + 1][startY - 1].curPiece == 'none')){
 
-        board[startX + 1][startY - 1].posSquare = true;
-        board[startX + 1][startY - 1].movingPiece = this;
+          board[startX + 1][startY - 1].posSquare = true;
+          board[startX + 1][startY - 1].movingPiece = this;
+        }
       }
-    }
-    if(((startX - 1) >= 0) && ((startY + 1) <= 7)){
-      if((board[startX - 1][startY + 1].curPiece != 'none' && 
-        board[startX - 1][startY + 1].curPiece.color != this.color) 
-        || (board[startX - 1][startY + 1].curPiece == 'none')){
+      if(((startX - 1) >= 0) && ((startY + 1) <= 7)){
+        if((board[startX - 1][startY + 1].curPiece != 'none' && 
+          board[startX - 1][startY + 1].curPiece.color != this.color) 
+          || (board[startX - 1][startY + 1].curPiece == 'none')){
 
-        board[startX - 1][startY + 1].posSquare = true;
-        board[startX - 1][startY + 1].movingPiece = this;
+          board[startX - 1][startY + 1].posSquare = true;
+          board[startX - 1][startY + 1].movingPiece = this;
+        }
       }
-    }
-    if(((startX + 1) <= 7) && ((startY + 1) <= 7)){
-      if((board[startX + 1][startY + 1].curPiece != 'none' && 
-        board[startX + 1][startY + 1].curPiece.color != this.color) 
-        || (board[startX + 1][startY + 1].curPiece == 'none')){
+      if(((startX + 1) <= 7) && ((startY + 1) <= 7)){
+        if((board[startX + 1][startY + 1].curPiece != 'none' && 
+          board[startX + 1][startY + 1].curPiece.color != this.color) 
+          || (board[startX + 1][startY + 1].curPiece == 'none')){
 
-        board[startX + 1][startY + 1].posSquare = true;
-        board[startX + 1][startY + 1].movingPiece = this;
+          board[startX + 1][startY + 1].posSquare = true;
+          board[startX + 1][startY + 1].movingPiece = this;
+        }
       }
-    }
-    if(((startX + 1) <= 7)){
-      if((board[startX + 1][startY].curPiece != 'none' && 
-        board[startX + 1][startY].curPiece.color != this.color) 
-        || (board[startX + 1][startY].curPiece == 'none')){
+      if(((startX + 1) <= 7)){
+        if((board[startX + 1][startY].curPiece != 'none' && 
+          board[startX + 1][startY].curPiece.color != this.color) 
+          || (board[startX + 1][startY].curPiece == 'none')){
 
-        board[startX + 1][startY].posSquare = true;
-        board[startX + 1][startY].movingPiece = this;
+          board[startX + 1][startY].posSquare = true;
+          board[startX + 1][startY].movingPiece = this;
+        }
       }
-    }
-    if(((startX - 1) >= 0)){
-      if((board[startX - 1][startY].curPiece != 'none' && 
-        board[startX - 1][startY].curPiece.color != this.color) 
-        || (board[startX - 1][startY].curPiece == 'none')){
+      if(((startX - 1) >= 0)){
+        if((board[startX - 1][startY].curPiece != 'none' && 
+          board[startX - 1][startY].curPiece.color != this.color) 
+          || (board[startX - 1][startY].curPiece == 'none')){
 
-        board[startX - 1][startY].posSquare = true;
-        board[startX - 1][startY].movingPiece = this;
+          board[startX - 1][startY].posSquare = true;
+          board[startX - 1][startY].movingPiece = this;
+        }
       }
-    }
-    if(((startY + 1) <= 7)){
-      if((board[startX][startY + 1].curPiece != 'none' && 
-        board[startX][startY + 1].curPiece.color != this.color) 
-        || (board[startX][startY + 1].curPiece == 'none')){
+      if(((startY + 1) <= 7)){
+        if((board[startX][startY + 1].curPiece != 'none' && 
+          board[startX][startY + 1].curPiece.color != this.color) 
+          || (board[startX][startY + 1].curPiece == 'none')){
 
-        board[startX][startY + 1].posSquare = true;
-        board[startX][startY + 1].movingPiece = this;
+          board[startX][startY + 1].posSquare = true;
+          board[startX][startY + 1].movingPiece = this;
+        }
       }
-    }
-    if(((startY - 1) >= 0)){
-      if((board[startX][startY - 1].curPiece != 'none' && 
-        board[startX][startY - 1].curPiece.color != this.color) 
-        || (board[startX][startY - 1].curPiece == 'none')){
+      if(((startY - 1) >= 0)){
+        if((board[startX][startY - 1].curPiece != 'none' && 
+          board[startX][startY - 1].curPiece.color != this.color) 
+          || (board[startX][startY - 1].curPiece == 'none')){
 
-        board[startX][startY - 1].posSquare = true;
-        board[startX][startY - 1].movingPiece = this;
+          board[startX][startY - 1].posSquare = true;
+          board[startX][startY - 1].movingPiece = this;
+        }
       }
-    }
-    if(checkCastlingKingside(this.color) == true){
-      this.canCastleKingside = true;
-      if(this.color == "white"){
-        board[7][6].posSquare = true;
-        board[7][6].movingPiece = this;
+      if(checkCastlingKingside(this.color) == true){
+        this.canCastleKingside = true;
+        if(this.color == "white"){
+          board[7][6].posSquare = true;
+          board[7][6].movingPiece = this;
+        }
+        else{
+          board[0][6].posSquare = true;
+          board[0][6].movingPiece = this;
+        }
       }
       else{
-        board[0][6].posSquare = true;
-        board[0][6].movingPiece = this;
+        this.canCastleKingside = false;
       }
-    }
-    else{
-      this.canCastleKingside = false;
-    }
-    if(checkCastlingQueenside(this.color) == true){
-      this.canCastleQueenside = true;
-      if(this.color == "white"){
-        board[7][2].posSquare = true;
-        board[7][2].movingPiece = this;
+      if(checkCastlingQueenside(this.color) == true){
+        this.canCastleQueenside = true;
+        if(this.color == "white"){
+          board[7][2].posSquare = true;
+          board[7][2].movingPiece = this;
+        }
+        else{
+          board[0][2].posSquare = true;
+          board[0][2].movingPiece = this;
+        }
       }
       else{
-        board[0][2].posSquare = true;
-        board[0][2].movingPiece = this;
+        this.canCastleQueenside = false;
       }
+      pruneMoves(this)
+      update();
     }
-    else{
-      this.canCastleQueenside = false;
-    }
-    pruneMoves(this)
-    update();
-
   }
 }
 
@@ -868,13 +880,17 @@ class GameSquare extends Component {
       }
     }
     this.props.updateBoard();
+    this.props.changePlayer();
   }
 
   returnImg = () => {
 
     if(this.props.curPiece != 'none'){
       this.state.imgComp = 
-        <TouchableHighlight onPress = {() => this.props.curPiece.move(this.props.board, this.props.updateBoard, this.props.pruneMoves, this.props.checkCastlingKingside, this.props.checkCastlingQueenside)}>
+        <TouchableHighlight onPress = {() => 
+        this.props.curPiece.move(this.props.board, this.props.updateBoard, this.props.pruneMoves, this.props.player, 
+                              this.props.checkCastlingKingside, this.props.checkCastlingQueenside)
+        }>
           <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
         </TouchableHighlight>;
       if(this.props.posSquare){
@@ -1053,6 +1069,17 @@ class GameBoard extends Component {
       }
     }
   }
+
+  changePlayer = () => {
+    if(this.state.curPlayer == "white"){
+      this.state.curPlayer = 'black';
+    }
+    else{
+      this.state.curPlayer = "white"
+    }
+    this.updateBoard();
+  };
+
   castlingQueenside = (color) => {
     var curPos = [];
     for(var i = 0; i < 8; i ++){
@@ -1230,7 +1257,7 @@ class GameBoard extends Component {
     if(color == "white"){
       for(var i = 0; i < this.state.blackPieces.length; i++){
         if(this.state.blackPieces[i].inPlay){
-          this.state.blackPieces[i].move(this.state.grid, this.filler, this.filler, this.filler, this.filler);
+          this.state.blackPieces[i].move(this.state.grid, this.filler, this.filler, this.state.curPlayer, this.filler, this.filler);
           for(var j = 0; j < 8; j ++){
             for(var k = 0; k < 8; k++){
               if(this.state.grid[j][k].posSquare){
@@ -1252,7 +1279,7 @@ class GameBoard extends Component {
     else{
       for(var i = 0; i < this.state.whitePieces.length; i++){
         if(this.state.whitePieces[i].inPlay){
-          this.state.whitePieces[i].move(this.state.grid, this.filler, this.filler, this.filler, this.filler);
+          this.state.whitePieces[i].move(this.state.grid, this.filler, this.filler, this.state.curPlayer, this.filler, this.filler);
           for(var j = 0; j < 8; j ++){
             for(var k = 0; k < 8; k++){
               if(this.state.grid[j][k].posSquare){
@@ -1316,6 +1343,7 @@ class GameBoard extends Component {
             addPiece = {this.addPiece}
             checkCastlingKingside = {this.castlingKingside}
             checkCastlingQueenside = {this.castlingQueenside}
+            changePlayer = {this.changePlayer}
           /> 
           )
         )}
