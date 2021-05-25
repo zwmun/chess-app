@@ -22,7 +22,7 @@ class Pawn {
       this.img = require("./photos/bPawn.png")
     }
   }
-  move = (board, update, pruneMoves) => {
+  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -219,7 +219,7 @@ class Knight {
       this.img = require("./photos/bKnight.png")
     }
   }
-  move = (board, update, pruneMoves) => {
+  move = (board, update, pruneMoves, castling) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -321,7 +321,7 @@ class Bishop {
       this.img = require("./photos/bBishop.png")
     }
   }
-  move = (board, update, pruneMoves) => {
+  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -407,6 +407,7 @@ class Rook {
     this.color = color;
     this.inPlay = true;
     this.img;
+    this.hasMoved = false;
     this.curPosition;
     if(this.color == "white"){
       this.img = require("./photos/wRook.png")
@@ -415,7 +416,7 @@ class Rook {
       this.img = require("./photos/bRook.png")
     }
   }
-  move = (board, update, pruneMoves) => {
+  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -498,7 +499,7 @@ class Queen {
       this.img = require("./photos/bQueen.png")
     }
   }
-  move = (board, update, pruneMoves) => {
+  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -645,6 +646,8 @@ class King {
     this.inPlay = true;
     this.img;
     this.curPosition;
+    this.type = 'king'
+    this.hasMoved = false;
     if(this.color == "white"){
       this.img = require("./photos/wKing.png")
     }
@@ -652,7 +655,7 @@ class King {
       this.img = require("./photos/bKing.png")
     }
   }
-  move = (board, update, pruneMoves) => {
+  move = (board, update, pruneMoves, checkCastlingKingside, checkCastlingQueenside) => {
     for(var i = 0; i < 8; i ++){
       for(var j = 0; j < 8; j ++){
         board[i][j].posSquare = false;
@@ -733,6 +736,34 @@ class King {
         board[startX][startY - 1].movingPiece = this;
       }
     }
+    if(checkCastlingKingside(this.color) == true){
+      this.canCastleKingside = true;
+      if(this.color == "white"){
+        board[7][6].posSquare = true;
+        board[7][6].movingPiece = this;
+      }
+      else{
+        board[0][6].posSquare = true;
+        board[0][6].movingPiece = this;
+      }
+    }
+    else{
+      this.canCastleKingside = false;
+    }
+    if(checkCastlingQueenside(this.color) == true){
+      this.canCastleQueenside = true;
+      if(this.color == "white"){
+        board[7][2].posSquare = true;
+        board[7][2].movingPiece = this;
+      }
+      else{
+        board[0][2].posSquare = true;
+        board[0][2].movingPiece = this;
+      }
+    }
+    else{
+      this.canCastleQueenside = false;
+    }
     pruneMoves(this)
     update();
 
@@ -765,7 +796,34 @@ class GameSquare extends Component {
           }
           this.props.board[this.props.position[0]][this.props.position[1]].curPiece = this.props.board[i][j].curPiece;
           this.props.board[i][j].curPiece = "none";
-
+          if(this.props.movingPiece.color == 'white'){
+            if(this.props.movingPiece.type == "king" && this.props.movingPiece.canCastleKingside && this.props.position == this.props.board[7][6].position){
+              
+              this.props.board[7][5].curPiece = this.props.board[7][7].curPiece;
+              this.props.board[7][5].curPiece.curPosition = this.props.board[7][5].position;
+              this.props.board[7][7].curPiece = 'none';
+            }
+            if(this.props.movingPiece.type == "king" && this.props.movingPiece.canCastleQueenside && this.props.position == this.props.board[7][2].position){
+              
+              this.props.board[7][3].curPiece = this.props.board[7][0].curPiece;
+              this.props.board[7][3].curPiece.curPosition = this.props.board[7][3].position;
+              this.props.board[7][0].curPiece = 'none';
+            }
+          }
+          else{
+            if(this.props.movingPiece.type == "king" && this.props.movingPiece.canCastleKingside && this.props.position == this.props.board[0][6].position){
+              this.props.board[0][5].curPiece = this.props.board[0][7].curPiece;
+              this.props.board[0][5].curPiece.curPosition = this.props.board[0][5].position;
+              this.props.board[0][7].curPiece = 'none';
+            }
+            if(this.props.movingPiece.type == "king" && this.props.movingPiece.canCastleQueenside && this.props.position == this.props.board[0][2].position){
+              
+              this.props.board[0][3].curPiece = this.props.board[0][0].curPiece;
+              this.props.board[0][3].curPiece.curPosition = this.props.board[0][3].position;
+              this.props.board[0][0].curPiece = 'none';
+            }
+          }
+          
           flag = true;
           break;
         }
@@ -810,14 +868,13 @@ class GameSquare extends Component {
       }
     }
     this.props.updateBoard();
-
   }
 
   returnImg = () => {
 
     if(this.props.curPiece != 'none'){
       this.state.imgComp = 
-        <TouchableHighlight onPress = {() => this.props.curPiece.move(this.props.board, this.props.updateBoard, this.props.pruneMoves)}>
+        <TouchableHighlight onPress = {() => this.props.curPiece.move(this.props.board, this.props.updateBoard, this.props.pruneMoves, this.props.checkCastlingKingside, this.props.checkCastlingQueenside)}>
           <Image style = {styles.imageSquare} source = {this.props.curPiece.img} />
         </TouchableHighlight>;
       if(this.props.posSquare){
@@ -995,7 +1052,177 @@ class GameBoard extends Component {
         }
       }
     }
-    
+  }
+  castlingQueenside = (color) => {
+    var curPos = [];
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j++){
+        if(this.state.grid[i][j].posSquare == true){
+          curPos.push(this.state.grid[i][j].position);
+        }
+      }
+    }
+    if(color == "white"){
+      if(!this.state.whiteKing.hasMoved && !this.state.grid[7][0].curPiece.hasMoved){
+        if(this.state.grid[7][1].curPiece == 'none' && this.state.grid[7][2].curPiece == 'none' && this.state.grid[7][3].curPiece == 'none'){
+          var curKingPos = [];
+          curKingPos[0] = this.state.whiteKing.curPosition[0];
+          curKingPos[1] = this.state.whiteKing.curPosition[1];
+          if(this.kingSafety("white")){
+            this.state.grid[curKingPos[0]][curKingPos[1]].curPiece = 'none';
+            this.state.grid[7][3].curPiece = this.state.whiteKing;
+            this.state.whiteKing.curPosition =  this.state.grid[7][3].position;
+            if(this.kingSafety("white")){
+              this.state.grid[7][3].curPiece = 'none';
+              this.state.grid[7][2].curPiece = 'none';
+              this.state.grid[7][2].curPiece = this.state.whiteKing;
+              this.state.whiteKing.curPosition =  this.state.grid[7][2].position;
+              if(this.kingSafety("white")){
+                this.state.grid[7][3].curPiece = 'none';
+                this.state.grid[7][2].curPiece = 'none';
+                this.state.whiteKing.curPosition = curKingPos;
+                for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+                  this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+                  this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.whiteKing;
+                }
+                return true;
+              }
+            }
+          }
+          this.state.grid[7][3].curPiece = 'none';
+          this.state.grid[7][2].curPiece = 'none';
+          this.state.whiteKing.curPosition = curKingPos;
+        }
+      }
+      for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+        this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+        this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.whiteKing;
+      }
+    }
+    else{
+      if(!this.state.blackKing.hasMoved && !this.state.grid[0][7].curPiece.hasMoved){
+        if(this.state.grid[0][1].curPiece == 'none' && this.state.grid[0][2].curPiece == 'none' && this.state.grid[0][3].curPiece == 'none'){
+          var curKingPos = [];
+          curKingPos[0] = this.state.blackKing.curPosition[0];
+          curKingPos[1] = this.state.blackKing.curPosition[1];
+          if(this.kingSafety("black")){
+            this.state.grid[curKingPos[0]][curKingPos[1]].curPiece = 'none';
+            this.state.grid[0][3].curPiece = this.state.blackKing;
+            this.state.blackKing.curPosition =  this.state.grid[0][3].position;
+            if(this.kingSafety("black")){
+              this.state.grid[0][2].curPiece = 'none';
+              this.state.grid[0][3].curPiece = 'none';
+              this.state.grid[0][2].curPiece = this.state.blackKing;
+              this.state.blackKing.curPosition =  this.state.grid[0][2].position;
+              if(this.kingSafety("black")){
+                this.state.grid[0][2].curPiece = 'none';
+                this.state.grid[0][3].curPiece = 'none';
+                this.state.blackKing.curPosition = curKingPos;
+                for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+                  this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+                  this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.blackKing;
+                }
+                return true;
+              }
+            }
+          }
+          this.state.grid[0][2].curPiece = 'none';
+          this.state.grid[0][3].curPiece = 'none';
+          this.state.blackKing.curPosition = curKingPos;
+        }
+      }
+      for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+        this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+        this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.blackKing;
+      }
+    }
+    return false;
+  }
+
+  castlingKingside = (color) => {
+    var curPos = [];
+    for(var i = 0; i < 8; i ++){
+      for(var j = 0; j < 8; j++){
+        if(this.state.grid[i][j].posSquare == true){
+          curPos.push(this.state.grid[i][j].position);
+        }
+      }
+    }
+    if(color == "white"){
+      if(!this.state.whiteKing.hasMoved && !this.state.grid[7][7].curPiece.hasMoved){
+        if(this.state.grid[7][6].curPiece == 'none' && this.state.grid[7][5].curPiece == 'none'){
+          var curKingPos = [];
+          curKingPos[0] = this.state.whiteKing.curPosition[0];
+          curKingPos[1] = this.state.whiteKing.curPosition[1];
+          if(this.kingSafety("white")){
+            this.state.grid[curKingPos[0]][curKingPos[1]].curPiece = 'none';
+            this.state.grid[7][5].curPiece = this.state.whiteKing;
+            this.state.whiteKing.curPosition =  this.state.grid[7][5].position;
+            if(this.kingSafety("white")){
+              this.state.grid[7][6].curPiece = 'none';
+              this.state.grid[7][5].curPiece = 'none';
+              this.state.grid[7][6].curPiece = this.state.whiteKing;
+              this.state.whiteKing.curPosition =  this.state.grid[7][6].position;
+              if(this.kingSafety("white")){
+                this.state.grid[7][6].curPiece = 'none';
+                this.state.grid[7][5].curPiece = 'none';
+                this.state.whiteKing.curPosition = curKingPos;
+                for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+                  this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+                  this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.whiteKing;
+                }
+                return true;
+              }
+            }
+          }
+          this.state.grid[7][6].curPiece = 'none';
+          this.state.grid[7][5].curPiece = 'none';
+          this.state.whiteKing.curPosition = curKingPos;
+        }
+      }
+      for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+        this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+        this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.whiteKing;
+      }
+    }
+    else{
+      if(!this.state.blackKing.hasMoved && !this.state.grid[0][7].curPiece.hasMoved){
+        if(this.state.grid[0][6].curPiece == 'none' && this.state.grid[0][5].curPiece == 'none'){
+          var curKingPos = [];
+          curKingPos[0] = this.state.blackKing.curPosition[0];
+          curKingPos[1] = this.state.blackKing.curPosition[1];
+          if(this.kingSafety("black")){
+            this.state.grid[curKingPos[0]][curKingPos[1]].curPiece = 'none';
+            this.state.grid[0][5].curPiece = this.state.blackKing;
+            this.state.blackKing.curPosition =  this.state.grid[0][5].position;
+            if(this.kingSafety("black")){
+              this.state.grid[0][6].curPiece = 'none';
+              this.state.grid[0][5].curPiece = 'none';
+              this.state.grid[0][6].curPiece = this.state.blackKing;
+              this.state.blackKing.curPosition =  this.state.grid[0][6].position;
+              if(this.kingSafety("black")){
+                this.state.grid[0][6].curPiece = 'none';
+                this.state.grid[0][5].curPiece = 'none';
+                this.state.blackKing.curPosition = curKingPos;
+                for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+                  this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+                  this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.blackKing;
+                }
+                return true;
+              }
+            }
+          }
+          this.state.grid[0][6].curPiece = 'none';
+          this.state.grid[0][5].curPiece = 'none';
+          this.state.blackKing.curPosition = curKingPos;
+        }
+      }
+      for(var k = 0; k < curPos.length; k ++){ // kingSafety just erased all of the posSquares, so we gotta reinstate them
+        this.state.grid[curPos[k][0]][curPos[k][1]].posSquare = true;
+        this.state.grid[curPos[k][0]][curPos[k][1]].movingPiece = this.state.blackKing;
+      }
+    }
+    return false;
   }
 
   kingSafety = (color) => {
@@ -1003,7 +1230,7 @@ class GameBoard extends Component {
     if(color == "white"){
       for(var i = 0; i < this.state.blackPieces.length; i++){
         if(this.state.blackPieces[i].inPlay){
-          this.state.blackPieces[i].move(this.state.grid, this.filler, this.filler);
+          this.state.blackPieces[i].move(this.state.grid, this.filler, this.filler, this.filler, this.filler);
           for(var j = 0; j < 8; j ++){
             for(var k = 0; k < 8; k++){
               if(this.state.grid[j][k].posSquare){
@@ -1025,7 +1252,7 @@ class GameBoard extends Component {
     else{
       for(var i = 0; i < this.state.whitePieces.length; i++){
         if(this.state.whitePieces[i].inPlay){
-          this.state.whitePieces[i].move(this.state.grid, this.filler, this.filler);
+          this.state.whitePieces[i].move(this.state.grid, this.filler, this.filler, this.filler, this.filler);
           for(var j = 0; j < 8; j ++){
             for(var k = 0; k < 8; k++){
               if(this.state.grid[j][k].posSquare){
@@ -1087,6 +1314,8 @@ class GameBoard extends Component {
             safety = {this.kingSafety}
             pruneMoves = {this.pruneMoves}
             addPiece = {this.addPiece}
+            checkCastlingKingside = {this.castlingKingside}
+            checkCastlingQueenside = {this.castlingQueenside}
           /> 
           )
         )}
@@ -1111,7 +1340,6 @@ export default function App() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
