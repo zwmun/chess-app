@@ -28,7 +28,6 @@ class Pawn {
         board[i][j].posSquare = false;
       }
     }
-    console.log(this.color, turn)
     if(this.color == turn){
       
       var startX = this.curPosition[0];
@@ -1354,19 +1353,34 @@ class GameBoard extends Component {
 
 }
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <View style={styles.content}>
+export default class App extends Component {
+  state = {
+    boardKey : 0,
+  }
+  resetBoard = () => {
+    this.setState({boardKey: this.state.boardKey + 1});
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <View style={styles.content}>
 
-        <GameBoard>
-        </GameBoard>
+          <GameBoard key = {this.state.boardKey}>
+          </GameBoard>
 
+        </View>
+        <View style={styles.navBar}>
+          <View style={styles.button}>
+            <TouchableHighlight onPress = {() => this.resetBoard()}>
+              <View>
+                {"reset"}
+              </View>
+            </TouchableHighlight>
+          </View>
+        </View>
       </View>
-      <View style={styles.navBar}>
-      </View>
-    </View>
-  );
+    );
+  }
 }
 const styles = StyleSheet.create({
   container: {
@@ -1378,13 +1392,25 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 7,
-    backgroundColor: 'blue',
+    backgroundColor: '#90aa90',
     justifyContent: 'center',
     alignItems: 'center',
   },
   navBar: {
     flex: 1,
-    backgroundColor: 'red',
+    borderTopColor : "white",
+    borderTopWidth: 5,
+    backgroundColor: '#aa90aa',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button:{
+    width: deviceWidth * 1/2,
+    height: deviceHeight * 1/15,
+    color: 'white',
+    backgroundColor: '#f0aa30',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   gameBoard: {
     width: deviceWidth * 8/9, /* i'd like each square to be 1/9 of the screen, with 1/18 spacing oneach side of the board*/
