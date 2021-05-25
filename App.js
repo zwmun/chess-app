@@ -1257,7 +1257,7 @@ class GameBoard extends Component {
     if(color == "white"){
       for(var i = 0; i < this.state.blackPieces.length; i++){
         if(this.state.blackPieces[i].inPlay){
-          this.state.blackPieces[i].move(this.state.grid, this.filler, this.filler, this.state.curPlayer, this.filler, this.filler);
+          this.state.blackPieces[i].move(this.state.grid, this.filler, this.filler, "black", this.filler, this.filler);
           for(var j = 0; j < 8; j ++){
             for(var k = 0; k < 8; k++){
               if(this.state.grid[j][k].posSquare){
@@ -1279,7 +1279,7 @@ class GameBoard extends Component {
     else{
       for(var i = 0; i < this.state.whitePieces.length; i++){
         if(this.state.whitePieces[i].inPlay){
-          this.state.whitePieces[i].move(this.state.grid, this.filler, this.filler, this.state.curPlayer, this.filler, this.filler);
+          this.state.whitePieces[i].move(this.state.grid, this.filler, this.filler, "white", this.filler, this.filler);
           for(var j = 0; j < 8; j ++){
             for(var k = 0; k < 8; k++){
               if(this.state.grid[j][k].posSquare){
